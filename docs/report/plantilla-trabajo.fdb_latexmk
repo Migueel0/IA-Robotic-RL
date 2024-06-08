@@ -1,8 +1,8 @@
 # Fdb version 4
-["pdflatex"] 1717747961.3794 "c:/Users/david/OneDrive/Escritorio/uni/IA/IA-Robotic-RL/docs/report/plantilla-trabajo.tex" "plantilla-trabajo.pdf" "plantilla-trabajo" 1717747962.60794 0
+["pdflatex"] 1717839701.69509 "c:/Users/david/OneDrive/Escritorio/uni/IA/IA-Robotic-RL/docs/report/plantilla-trabajo.tex" "plantilla-trabajo.pdf" "plantilla-trabajo" 1717839703.12374 0
   "Ejemplo_mapa.png" 1717664745 1678 432acb516d9aac16f35a04fc4f976647 ""
   "Reinforcement_learning_diagram.png" 1717576375 12662 20177d55f7b4cb6cbe8959c61cd1cc34 ""
-  "c:/Users/david/OneDrive/Escritorio/uni/IA/IA-Robotic-RL/docs/report/plantilla-trabajo.tex" 1717747960 26414 0cb2ee61d85cd616c202028591282610 ""
+  "c:/Users/david/OneDrive/Escritorio/uni/IA/IA-Robotic-RL/docs/report/plantilla-trabajo.tex" 1717839700 31776 67391b13695828314fd482bf07d736cc ""
   "c:/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc" 1717574229 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "c:/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1717574545 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2024/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1717573994 960 379cc0019370a9e0208a0a3f949f847a ""
@@ -74,8 +74,10 @@
   "c:/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1717577448 5528846 47cdb80fb017a8505c1f8b75ba228bf0 ""
   "c:/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1717577585 8238500 6d5537a7d7245be4f9da238ae7505c85 ""
   "c:/texlive/2024/texmf.cnf" 1717577427 713 e69b156964470283e0530f5060668171 ""
-  "plantilla-trabajo.aux" 1717747962 3886 fa434f31c321ae9e74c286560c7f5c3c "pdflatex"
-  "plantilla-trabajo.tex" 1717747960 26414 0cb2ee61d85cd616c202028591282610 ""
+  "plantilla-trabajo.aux" 1717839702 5181 c31747844349b08179f5183763ef49f0 "pdflatex"
+  "plantilla-trabajo.tex" 1717839700 31776 67391b13695828314fd482bf07d736cc ""
+  "resultado_qlearning_mapa_1.png" 1717839014 90276 478f64a17eb5e631f67b1a6b0a5edf3e ""
+  "resultado_qlearning_mapa_2.png" 1717839387 63168 857428cae73d15258c43bf65fcfa123c ""
   (generated)
   "plantilla-trabajo.aux"
   "plantilla-trabajo.log"

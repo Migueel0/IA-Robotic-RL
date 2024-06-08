@@ -166,6 +166,14 @@ INPUT c:/texlive/2024/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm
 INPUT c:/texlive/2024/texmf-dist/fonts/vf/adobe/courier/pcrr7t.vf
 INPUT c:/texlive/2024/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm
+INPUT ./resultado_qlearning_mapa_1.png
+INPUT ./resultado_qlearning_mapa_1.png
+INPUT ./resultado_qlearning_mapa_1.png
+INPUT ./resultado_qlearning_mapa_1.png
+INPUT ./resultado_qlearning_mapa_2.png
+INPUT ./resultado_qlearning_mapa_2.png
+INPUT ./resultado_qlearning_mapa_2.png
+INPUT ./resultado_qlearning_mapa_2.png
 INPUT plantilla-trabajo.aux
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
 INPUT c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb

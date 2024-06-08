@@ -190,7 +190,7 @@ Para un mejor entendimiento de cómo realizar la implementación de los algoritm
   \item Reinforcement Learning: An Introduction~\cite{b1}.
 \end{itemize}
 
-\section{Metodología}
+\section{Implementación}
 
 En esta sección, describiremos el método implementado en nuestro trabajo. Abordaremos los siguientes aspectos:
 
@@ -413,7 +413,8 @@ Tras presentar todas las funciones auxiliares utilizadas en la implementación d
 
 \textbf{Q-Learning\newline}
 
-En primer lugar nos encontramos con el algoritmo de Q-Learning.
+En primer lugar, nos encontramos con el algoritmo de Q-Learning. Los valores de los hiperparámetros se han seleccionado de manera que optimicen el rendimiento del algoritmo. 
+No obstante, en la siguiente sección se detallarán los experimentos y pruebas realizadas.\newline\newline\newline
 
 \begin{figure}[h]
   \begin{pseudo}
@@ -442,18 +443,110 @@ En primer lugar nos encontramos con el algoritmo de Q-Learning.
   \label{fig:q-learning}
 \end{figure}
 
+Del pseudocódigo se puede ver cómo Q-Learning sigue un enfoque \textit{off-policy}, ya que, al actualizar su tabla de valores Q,
+no tiene en cuenta la política que está siguiendo el robot y elige la acción que maximice la recompensa esperada en el nuevo estado.\newline
 
+\textbf{SARSA\newline}
 
-\begin{thebibliography}{00}
-\bibitem{b1} Richard S. Sutton y Andrew G. Barto. Reinforcement Learning: An Introduction.
-MIT Press, 2018.
-\bibitem{b2} https://www.codificandobits.com/curso/aprendizaje-por-refuerzo-nivel-basico/2-ejemplos-reales-aplicacion-aprendizaje-por-refuerzo/
-\bibitem{b3} https://www.aprendemachinelearning.com/aprendizaje-por-refuerzo/
-\bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
-\bibitem{b5} https://es.wikipedia.org/wiki/Q-learning
-\bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
-\bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
-\end{thebibliography}
+A continuación se muestran los detalles de la implementación realizada del algoritmo SARSA. De igual manera que en Q-Learning, el valor de los hiperparámetros
+se han seleccionado de manera que optimicen el rendimiento del algoritmo. 
+
+\begin{figure}[!h]
+  \begin{minipage}{\linewidth}
+  \begin{pseudo}
+  \textbf{SARSA}: \\
+  Inicializar $Q\_table$ como diccionario vacío \\
+  Parámetros: $\alpha = 0.1$, $\gamma = 0.9$, $\epsilon = 0.1$, \\ $num\_episodios = 100000$, $max\_pasos = 100$ \\
+  Para cada episodio: \\
+  \> Estado aleatorio sin obstáculos \\
+  \> \textit{accion\_index} $\leftarrow$ escoger\_accion(\textit{estado}, $\epsilon$) \\
+  \> \textit{accion} $\leftarrow$ nav\_acciones[\textit{accion\_index}] \\
+  \> Para cada paso: \\
+  \> \> Aplicar acción, obtener nuevo estado y recompensa \\
+  \> \> \textit{nueva\_accion\_index} $\leftarrow$ escoger\_accion(\textit{nuevo\_estado}, $\epsilon$) \\
+  \> \> \textit{nueva\_accion} $\leftarrow$ nav\_acciones[\textit{nueva\_accion\_index}] \\
+  Si \textit{estado} \textnormal{no está en} \textit{Q\_table} entonces \\+
+  Inicializar \textit{Q\_table}[\textit{estado}] con ceros \\-
+
+  \end{pseudo}
+  \end{minipage}
+  \caption{Pseudocódigo del algoritmo SARSA (Parte 1).}
+  \label{fig:sarsa1}
+\end{figure}
+
+\begin{figure}
+  \begin{minipage}{\linewidth}
+  \begin{pseudo}
+  \textbf{Fin Si} \\
+  Si \textit{nuevo\_estado} \textnormal{no está en} \textit{Q\_table} entonces \\+
+    Inicializar \textit{Q\_table}[\textit{nuevo\_estado}] con ceros \\-
+  \textbf{Fin Si} \\
+  \textit{Q\_table}[\textit{estado}][\textit{accion}] $\leftarrow$ \textit{Q\_table}[\textit{estado}][\textit{accion}] + \\
+  \> $\alpha \cdot (\textit{recompensa} + \gamma \cdot \textit{Q\_table}[\textit{nuevo\_estado}][\textit{nueva\_accion}] -$ \\
+  \> $\textit{Q\_table}[\textit{estado}][\textit{accion}])$ \\
+  \> \textit{estado} $\leftarrow$ \textit{nuevo\_estado} \\
+  \> \textit{accion} $\leftarrow$ \textit{nueva\_accion} \\
+  \> Si \textit{estado} == destino, terminar \\
+  \end{pseudo}
+  \end{minipage}
+  \caption{Pseudocódigo del algoritmo SARSA (Parte 2).}
+  \label{fig:sarsa2}
+\end{figure}
+
+En esta ocasión, al actualizar los valores de la tabla Q, el robot tiene en cuenta la política que está siguiendo. Esto es debido a su enfoque \textit{on-policy}, diferenciándolo de esta manera del algoritmo de Q-Learning.\newline
+
+\section{Pruebas y experimentación}
+En esta sección, se detallan los experimentos realizados y los resultados obtenidos al aplicar tres algoritmos de aprendizaje por refuerzo (Q-Learning, Montecarlo y SARSA) 
+en el contexto de la planificación de rutas por parte de un robot móvil.
+
+\subsection{Experimentos realizados}
+
+Para llevar a cabo los experimentos, se diseñaron tres mapas de prueba, cada uno con un tamaño diferente, un porcentaje distinto de obstáculos y 
+una casilla objetivo única. La posición inicial del robot se selecciona de manera aleatoria en cada experimento. 
+El objetivo es evaluar la capacidad del agente para planificar una ruta segura hacia el objetivo, evitando colisionar con los obstáculos presentes en el entorno. 
+Se espera que el agente se mueva por zonas alejadas de los pasillos para maximizar la seguridad durante la navegación.\newline
+
+A continuación, se presentan los resultados obtenidos de los experimentos realizados con cada uno de los algoritmos de aprendizaje por refuerzo. Se probaron diferentes configuraciones en los hiperparámetros de cada algoritmo para evaluar su rendimiento en una variedad de escenarios.\newline
+
+\subsubsection{\textbf{Q-Learning}}
+
+Como se describió en la sección de \textit{Implementación}, los hiperparámetros utilizados para ajustar el rendimiento del algoritmo Q-Learning son los siguientes:\newline
+
+Tasa de aprendizaje($\alpha$) = 0.2, Factor de descuento($\gamma$) = 0.9, Tasa de exploración($\epsilon$) = 0.3,  Épocas de entrenamiento = 5000, Máximo de pasos por episodio = 100\newline
+
+Se optó por valores bajos de $\alpha$ y $\epsilon$ para priorizar la explotación de la mejor acción conocida y permitir que el agente aprenda de manera gradual, evitando posibles desbordamientos en los resultados que podrían surgir de un aprendizaje demasiado rápido.\newline
+
+A continuación, se presentan los resultados obtenidos en cada uno de los mapas de prueba:
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.38]{resultado_qlearning_mapa_1}
+  \caption{Resultados Q-Learning mapa 1}
+  \label{fig:resultado_qlearning_mapa_1}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.38]{resultado_qlearning_mapa_2}
+  \caption{Resultados Q-Learning mapa 2}
+  \label{fig:resultado_qlearning_mapa_2}
+\end{figure}
+
+\begin{figure}[h!]
+  \begin{thebibliography}{99}
+  \bibitem{b1} Richard S. Sutton y Andrew G. Barto. Reinforcement Learning: An Introduction.
+  MIT Press, 2018.
+  \bibitem{b2} https://www.codificandobits.com/curso/aprendizaje-por-refuerzo-nivel-basico/2-ejemplos-reales-aplicacion-aprendizaje-por-refuerzo/
+  \bibitem{b3} https://www.aprendemachinelearning.com/aprendizaje-por-refuerzo/
+  \bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
+  \bibitem{b5} https://es.wikipedia.org/wiki/Q-learning
+  \bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
+  \bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
+  \end{thebibliography}
+  \caption{Referencias bibliográficas.}
+  \label{fig:bibliography}
+  \end{figure}
+  
 
 
 \end{document}
