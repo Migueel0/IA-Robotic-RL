@@ -482,7 +482,8 @@ se han seleccionado de manera que optimicen el rendimiento del algoritmo.
     Inicializar \textit{Q\_table}[\textit{nuevo\_estado}] con ceros \\-
   \textbf{Fin Si} \\
   \textit{Q\_table}[\textit{estado}][\textit{accion}] $\leftarrow$ \textit{Q\_table}[\textit{estado}][\textit{accion}] + \\
-  \> $\alpha \cdot (\textit{recompensa} + \gamma \cdot \textit{Q\_table}[\textit{nuevo\_estado}][\textit{nueva\_accion}] -$ \\
+  \> $\alpha \cdot (\textit{recompensa} + $ \\
+  \> $\gamma \cdot \textit{Q\_table}[\textit{nuevo\_estado}][\textit{nueva\_accion}] -$ \\
   \> $\textit{Q\_table}[\textit{estado}][\textit{accion}])$ \\
   \> \textit{estado} $\leftarrow$ \textit{nuevo\_estado} \\
   \> \textit{accion} $\leftarrow$ \textit{nueva\_accion} \\
@@ -492,6 +493,7 @@ se han seleccionado de manera que optimicen el rendimiento del algoritmo.
   \caption{Pseudocódigo del algoritmo SARSA (Parte 2).}
   \label{fig:sarsa2}
 \end{figure}
+
 
 En esta ocasión, al actualizar los valores de la tabla Q, el robot tiene en cuenta la política que está siguiendo. Esto es debido a su enfoque \textit{on-policy}, diferenciándolo de esta manera del algoritmo de Q-Learning.\newline
 
@@ -514,7 +516,8 @@ Como se describió en la sección de \textit{Implementación}, los hiperparámet
 
 Tasa de aprendizaje($\alpha$) = 0.2, Factor de descuento($\gamma$) = 0.9, Tasa de exploración($\epsilon$) = 0.3,  Épocas de entrenamiento = 5000, Máximo de pasos por episodio = 100\newline
 
-Se optó por valores bajos de $\alpha$ y $\epsilon$ para priorizar la explotación de la mejor acción conocida y permitir que el agente aprenda de manera gradual, evitando posibles desbordamientos en los resultados que podrían surgir de un aprendizaje demasiado rápido.\newline
+Se optó por valores bajos de $\alpha$ y $\epsilon$ para priorizar la explotación de la mejor acción conocida y permitir que el agente aprenda de manera gradual, evitando posibles desbordamientos en los resultados que podrían surgir de un aprendizaje demasiado rápido.
+Adicionalmente, probamos con un valor alto de $\gamma$ para que el agente priorizara las recompensas futuras sobre las inmediatas.\newline
 
 A continuación, se presentan los resultados obtenidos en cada uno de los mapas de prueba:
 
@@ -531,6 +534,62 @@ A continuación, se presentan los resultados obtenidos en cada uno de los mapas 
   \caption{Resultados Q-Learning mapa 2}
   \label{fig:resultado_qlearning_mapa_2}
 \end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.38]{resultado_qlearning_mapa_3}
+  \caption{Resultados Q-Learning mapa 3}
+  \label{fig:resultado_qlearning_mapa_3}
+\end{figure}
+
+Las imágenes de las rutas diseñadas por el robot en cada uno de los tres mapas muestran resultados muy satisfactorios por varias razones.
+En primer lugar, el robot ha sido capaz de generar rutas cortas y directas, minimizando el tiempo y los recursos necesarios para alcanzar el objetivo.
+Además, el robot ha demostrado una habilidad consistente para evitar colisiones con los obstáculos presentes en los mapas, incluso en aquellos con una mayor densidad de obstáculos. Finalmente, se destaca la robustez del algoritmo, 
+ya que los resultados han sido satisfactorios en todos los mapas, a pesar de las variaciones en el tamaño, la densidad de obstáculos y la posición del estado objetivo.\newline
+
+Por otro lado, tras realizar numerosas pruebas con variaciones en el valor de los hiperparámetros, llegamos a la conclusión de que las modificaciones en los valores de la tasa de aprendizaje, el factor de descuento y la tasa de exploración no producían cambios significativos en los resultados,
+e incluso en algunos casos se observaron pequeñas mejoras. No obstante, se pudo verificar que al reducir significativamente el \textit{número de épocas de entrenamiento} 
+del algoritmo, los resultados fueron mucho peores. Por ejemplo, al establecer el número de épocas en 1000,
+estos son los resultados obtenidos en cada uno de los mapas:
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.33]{resultado_2_qlearning_mapa_1}
+  \caption{Resultados Q-Learning mapa 1 tras modificar el número de épocas}
+  \label{fig:resultado_2_qlearning_mapa_1}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.33]{resultado_2_qlearning_mapa_2}
+  \caption{Resultados Q-Learning mapa 2 tras modificar el número de épocas}
+  \label{fig:resultado_2_qlearning_mapa_2}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.33]{resultado_2_qlearning_mapa_3}
+  \caption{Resultados Q-Learning mapa 3 tras modificar el número de épocas}
+  \label{fig:resultado_2_qlearning_mapa_3}
+\end{figure}
+
+Como se puede apreciar, los resultados no son tan satisfactorios, ya que el robot colisiona con los obstáculos en ciertas ocasiones y no suele seleccionar la ruta más eficiente para llegar a la casilla objetivo. 
+Este empeoramiento de los resultados es más notorio en los mapas 1 y 3, lo cual tiene sentido porque, al ser mapas más grandes, requieren un mayor número de épocas de entrenamiento para que el agente aprenda la política óptima.\newline
+
+\subsubsection{\textbf{SARSA}}
+
+Como se describió en la sección de \textit{Implementación}, los hiperparámetros utilizados para ajustar el rendimiento del algoritmo SARSA son los siguientes:\newline
+
+Tasa de aprendizaje($\alpha$) = 0.1, Factor de descuento($\gamma$) = 0.9, Tasa de exploración($\epsilon$) = 0.1,  Episodios de entrenamiento = 100000, Máximo de pasos por episodio = 100\newline
+
+Al igual que en Q-Learning, utilizamos valores bajos de $\alpha$ y $\epsilon$ para priorizar la explotación de la mejor acción conocida y permitir que el agente aprenda de manera gradual, evitando posibles 
+desbordamientos en los resultados que podrían surgir de un aprendizaje demasiado rápido. Adicionalmente, usamos un valor alto de $\gamma$ para que el agente priorizara las recompensas futuras sobre las inmediatas.\newline
+
+Finalmente, es importante destacar que el número de episodios de entrenamiento es significativamente mayor que en Q-Learning debido a que, como SARSA tiene un enfoque \textit{on-policy},
+normalmente converge más lentamente a una política óptima. Por ello, consideramos necesario aumentar el número de iteraciones del algoritmo.
+
+
+
 
 \begin{figure}[h!]
   \begin{thebibliography}{99}
