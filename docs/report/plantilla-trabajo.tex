@@ -578,19 +578,38 @@ Este empeoramiento de los resultados es más notorio en los mapas 1 y 3, lo cual
 
 \subsubsection{\textbf{SARSA}}
 
-Como se describió en la sección de \textit{Implementación}, los hiperparámetros utilizados para ajustar el rendimiento del algoritmo SARSA son los siguientes:\newline
+En la implementación del algoritmo SARSA, los valores de los hiperparámetros se ajustaron según el mapa. En el mapa 2 (el más simple de todos), aumentamos la tasa de aprendizaje a 0.5 para que el agente pudiera aprender rápidamente sin una excesiva preocupación por desbordamientos en los valores Q. Además, reducimos el factor de descuento a 0.5, ya que en un mapa más pequeño las recompensas futuras no son tan importantes como las inmediatas, dado que el objetivo está más cerca. Mantenemos el valor de epsilon muy bajo, en 0.1, pues la simpleza del mapa permite que este pueda ser explorado completamente de manera rápida.
 
-Tasa de aprendizaje($\alpha$) = 0.1, Factor de descuento($\gamma$) = 0.9, Tasa de exploración($\epsilon$) = 0.1,  Episodios de entrenamiento = 100000, Máximo de pasos por episodio = 100\newline
+En los otros dos mapas, al ser entornos más complejos, disminuimos la tasa de aprendizaje y aumentamos tanto el factor de descuento como la tasa de exploración. Estas modificaciones permiten que el agente explore más y valore mejor las recompensas a largo plazo, necesarios en escenarios más complicados.
 
-Al igual que en Q-Learning, utilizamos valores bajos de $\alpha$ y $\epsilon$ para priorizar la explotación de la mejor acción conocida y permitir que el agente aprenda de manera gradual, evitando posibles 
-desbordamientos en los resultados que podrían surgir de un aprendizaje demasiado rápido. Adicionalmente, usamos un valor alto de $\gamma$ para que el agente priorizara las recompensas futuras sobre las inmediatas.\newline
+Finalmente, es importante destacar que el número de episodios de entrenamiento es significativamente mayor que en Q-Learning. Esto se debe a que SARSA, al tener un enfoque \textit{on-policy}, normalmente converge más lentamente hacia una política óptima. Por ello, consideramos necesario aumentar el número de iteraciones del algoritmo.
 
-Finalmente, es importante destacar que el número de episodios de entrenamiento es significativamente mayor que en Q-Learning debido a que, como SARSA tiene un enfoque \textit{on-policy},
-normalmente converge más lentamente a una política óptima. Por ello, consideramos necesario aumentar el número de iteraciones del algoritmo.
+A continuación, se presentan los resultados obtenidos en cada uno de los mapas de prueba:
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.33]{resultado_sarsa_mapa_1}
+  \caption{Resultados SARSA mapa 1}
+  \label{fig:resultado_sarsa_mapa_1}
+\end{figure}
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.33]{resultado_sarsa_mapa_2}
+  \caption{Resultados SARSA mapa 2}
+  \label{fig:resultado_sarsa_mapa_2}
+\end{figure}
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.25]{resultado_sarsa_mapa_3}
+  \caption{Resultados SARSA mapa 3}
+  \label{fig:resultado_sarsa_mapa_3}
+\end{figure}
 
+Tras implementar y ejecutar el algoritmo SARSA con los hiperparámetros descritos anteriormente, los resultados obtenidos fueron comparativamente inferiores a los logrados con Q-Learning y Montecarlo. En primer lugar, las rutas generadas por SARSA fueron, en promedio, más largas y menos directas. Además, se observó que el agente colisionó con obstáculos con mayor frecuencia, lo que indica que el robot no aprendió completamente a esquivar los obstáculos. Por último, SARSA mostró una convergencia más lenta hacia una política óptima. A pesar del aumento en el número de episodios de entrenamiento, la política aprendida no alcanzó el mismo nivel de eficacia que las aprendidas con los otros algoritmos.
+
+Una observación interesante es que, a diferencia de Q-Learning, los hiperparámetros en este algoritmo tienen una mayor relevancia en su ejecución, evidenciándose caídas en el rendimiento cuando se probaban con valores alejados a los explicados con anterioridad.
 \begin{figure}[h!]
   \begin{thebibliography}{99}
   \bibitem{b1} Richard S. Sutton y Andrew G. Barto. Reinforcement Learning: An Introduction.
