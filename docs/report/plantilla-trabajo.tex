@@ -61,12 +61,9 @@
 
 % Resumen
 \begin{abstract}
-  El objetivo principal de este trabajo es comparar tres algoritmos de aprendizaje por refuerzo: Q-Learning, Montecarlo y SARSA,
-  en el contexto de la planificación de rutas para un robot móvil en un entorno con obstáculos. El estudio se centra en evaluar la eficiencia computacional, la convergencia y la robustez
-  de cada algoritmo al navegar hacia un destino minimizando la posibilidad de colisión.
-
-  Los resultados obtenidos muestran que cada algoritmo presenta ventajas y desventajas específicas en diferentes aspectos del problema planteado. 
-  Q-Learning demostró una rápida convergencia en la mayoría de los escenarios, mientras que Montecarlo ofreció una mejor exploración del espacio de estados. SARSA, por su parte, destacó en entornos altamente estocásticos debido a su enfoque de aprendizaje on-policy. Estas conclusiones ofrecen una guía para la selección del algoritmo más adecuado según las características del entorno y los requisitos del sistema.
+  El objetivo principal de este trabajo es comparar tres algoritmos de aprendizaje por refuerzo: Q-Learning, Montecarlo y SARSA, en el contexto de la planificación de rutas para un robot móvil en un entorno con obstáculos. El estudio se centra en evaluar la eficiencia, la convergencia, la longitud de las rutas generadas y la capacidad de evitar colisiones de cada algoritmo al navegar hacia un destino. Los resultados obtenidos muestran que cada algoritmo presenta ventajas y desventajas específicas en diferentes aspectos del problema planteado. Q-Learning demostró una rápida convergencia y generó rutas más directas en la mayoría de los escenarios, mientras que Montecarlo ofreció una mejor exploración del espacio de estados. SARSA, por su parte, destacó en entornos altamente estocásticos debido a su enfoque de aprendizaje on-policy, aunque presentó peores resultados en general y una convergencia más lenta.\newline
+  
+  Estas conclusiones ofrecen una guía para la selección del algoritmo más adecuado según las características del entorno y los requisitos del sistema, y se sugieren mejoras futuras basadas en el aprendizaje transferencial y otras técnicas avanzadas.\newline
 \end{abstract}
 
 
@@ -81,16 +78,15 @@
 
 El aprendizaje por refuerzo es un tipo de aprendizaje automático que se enfoca en la toma de decisiones en entornos dinámicos y no deterministas. 
 En este tipo de aprendizaje, el agente interactúa con el entorno y recibe recompensas o penalizaciones en función de sus acciones.
-El objetivo es maximizar las recompensas y minimizar las penalizaciones para encontrar la política óptima.
+El objetivo es maximizar las recompensas y minimizar las penalizaciones para encontrar la política óptima.\newline
 
 Esta técnica tiene una gran variedad de aplicaciones entre las que se encuentran predicciones financieras, robótica, 
-videojuegos, medicina o cualquier problema de optimización~\cite{b2}~\cite{b3}.
+videojuegos, medicina o cualquier problema de optimización~\cite{b2}~\cite{b3}~\cite{b6}.\newline
 
 En el contexto de nuestro trabajo, nos centraremos en la aplicación del aprendizaje por refuerzo a la planificación de rutas para robots móviles. En este problema, un robot con ruedas debe encontrar una ruta segura y eficiente en un entorno con obstáculos. Aunque este problema puede parecer simple a primera vista, la presencia de obstáculos, la estocasticidad en el efecto de las acciones 
-y la necesidad de optimizar la ruta para minimizar el tiempo y los recursos hacen que sea un desafío significativo.
+y la necesidad de optimizar la ruta para minimizar el tiempo y los recursos hacen que sea un desafío significativo.\newline
 
-Para evaluar la eficacia de los algoritmos de aprendizaje por refuerzo en este contexto, diseñamos tres mapas diferentes que varían en tamaño y porcentaje de obstáculos. Estos mapas nos permitirán comparar y analizar el rendimiento de los algoritmos en una variedad de escenarios.
-Comenzamos nuestro trabajo con el mapa de ejemplo proporcionado en la propuesta del trabajo, que tiene dimensiones de 15x51. 
+Para evaluar la eficacia de los algoritmos de aprendizaje por refuerzo en este contexto, utilizamos tres mapas diferentes que varían en tamaño y porcentaje de obstáculos. Estos mapas nos permitirán comparar y analizar el rendimiento de los algoritmos en una variedad de escenarios.
 
 \begin{figure}[h]
   \centering
@@ -102,20 +98,22 @@ Comenzamos nuestro trabajo con el mapa de ejemplo proporcionado en la propuesta 
 
 \section{Preliminares}
 
-En esta sección, proporcionamos una introducción a los conceptos fundamentales del aprendizaje por refuerzo y la planificación de rutas de robots 
-móviles en entornos con obstáculos, así como una descripción de los algoritmos de aprendizaje por refuerzo que utilizaremos en nuestro trabajo.
+En esta sección, proporcionamos una introducción a los conceptos fundamentales del aprendizaje por refuerzo,
+así como una descripción de los algoritmos de aprendizaje por refuerzo que utilizaremos en nuestro trabajo.
 
 \subsection{Conceptos clave del aprendizaje por refuerzo}
 
-El aprendizaje por refuerzo (RL) es un tipo de aprendizaje automático que entrena al software para tomar decisiones y maximizar una recompensa en un entorno dado. 
+El aprendizaje por refuerzo (RL) es un tipo de aprendizaje automático que entrena al software para tomar decisiones y maximizar una recompensa en un entorno dado a través de 
+un proceso de ensayo y error~\cite{b7}.\newline
+
 Los componentes principales de un sistema de aprendizaje por refuerzo son:
 
 \begin{itemize}
   \item \textbf{Agente}: Es la parte del sistema que toma decisiones e interactúa con el entorno. En nuestro caso, el agente es el robot móvil que busca planificar rutas en un entorno con obstáculos.
-  \item \textbf{Entorno}: Es el espacio en el que el agente se mueve y interactúa. En nuestro caso, el entorno es un mapa con obstáculos.
+  \item \textbf{Entorno}: Es el espacio en el que el agente se mueve e interactúa. En nuestro caso, el entorno es un mapa con obstáculos.
   \item \textbf{Acción}: Una acción es la decisión tomada por el agente en un estado particular. En nuestro caso, tenemos tenemos ocho acciones que representan cada uno de los posibles movimientos que puede efectuar el robot y una 
     acción que representa que el agente permanezca en el mismo estado tras realizarla.
-  \item \textbf{Recompensa}: La recompensa es la retroalimentación que el agente recibe del entorno después de tomar una acción en un estado dado. La recompensa puede ser positiva, neutra o negativa (esto sería una penalización).
+  \item \textbf{Recompensa}: La recompensa es la retroalimentación que el agente recibe del entorno después de tomar una acción en un estado dado. En nuestro caso, la recompensa puede ser positiva o negativa (también llamada penalización).
   \item \textbf{Política}: La política es la estrategia utilizada por el agente para seleccionar acciones en función de los estados del entorno. 
   \item \textbf{Exploración}: Es el proceso de probar nuevas acciones y recopilar información sobre el entorno. La exploración es esencial para que el agente descubra nuevas oportunidades y estrategias que podrían llevar a recompensas a largo plazo más altas.
   \item \textbf{Explotación}: Es el proceso de utilizar la información aprendida para tomar decisiones que maximicen la recompensa inmediata. La explotación es importante para que el agente obtenga la mayor recompensa posible en el momento presente.
@@ -148,9 +146,11 @@ Se trata de un algoritmo con un enfoque \textit{off-policy}, lo que significa qu
 
 \textbf{Hiperparámetros en Q-Learning}
 \begin{itemize}
+  \item \textbf{Número de episodios:} La cantidad total de episodios que se utilizan para entrenar el algoritmo. Un mayor número de episodios puede permitir un mejor aprendizaje, aunque también incrementa el tiempo de entrenamiento.
+  \item \textbf{Número de pasos máximo por episodio:} El número máximo de pasos que el agente puede tomar dentro de un solo episodio antes de que termine. Esto es útil para evitar que los episodios se alarguen indefinidamente y asegurar que el agente tenga múltiples oportunidades de aprender dentro de un tiempo razonable.
   \item \textbf{Tasa de aprendizaje (\(\alpha\)):} Controla cuánto se actualiza la función Q con nuevas experiencias. Un valor alto de \(\alpha\) permite un aprendizaje rápido pero puede causar oscilaciones, mientras que un valor bajo conduce a un aprendizaje más estable pero más lento.
-  \item \textbf{Factor de descuento (\(\gamma\)):} Determina la importancia de las recompensas futuras. Un valor alto de \(\gamma\) hace que el agente valore más las recompensas futuras, lo que es esencial para tareas donde las decisiones tempranas afectan significativamente las recompensas futuras.
-  \item \textbf{Estrategia de exploración (\(\epsilon\) en \(\epsilon\)-greedy):} Controla el balance entre exploración y explotación. Un valor alto de \(\epsilon\) fomenta la exploración, lo que es crucial al inicio del aprendizaje, mientras que un valor bajo de \(\epsilon\) fomenta la explotación de acciones conocidas.\newline
+  \item \textbf{Factor de descuento (\(\gamma\)):} Determina la importancia de las recompensas futuras. Un valor alto de \(\gamma\) hace que el agente valore más las recompensas futuras, mientras que un valor bajo de \(\gamma\) se centra más en las recompensas inmediatas.
+  \item \textbf{Estrategia de exploración (\(\epsilon\) en \(\epsilon\)-greedy):} Controla el balance entre exploración y explotación. Un valor alto de \(\epsilon\) fomenta la exploración, mientras que un valor bajo de \(\epsilon\) fomenta la explotación de acciones conocidas.\newline
 \end{itemize}
 
 
@@ -180,9 +180,11 @@ exploración de numerosas acciones~\cite{b4}.\newline
 
 \textbf{Hiperparámetros en SARSA}
 \begin{itemize}
+  \item \textbf{Número de episodios:} La cantidad total de episodios que se utilizan para entrenar el algoritmo. Un mayor número de episodios puede permitir un mejor aprendizaje, aunque también incrementa el tiempo de entrenamiento.
+  \item \textbf{Número de pasos máximo por episodio:} El número máximo de pasos que el agente puede tomar dentro de un solo episodio antes de que termine. Esto es útil para evitar que los episodios se alarguen indefinidamente y asegurar que el agente tenga múltiples oportunidades de aprender dentro de un tiempo razonable.
   \item \textbf{Tasa de aprendizaje (\(\alpha\)):} Controla cuánto se actualiza la función Q con nuevas experiencias. Un valor alto de \(\alpha\) permite un aprendizaje rápido pero puede causar oscilaciones, mientras que un valor bajo conduce a un aprendizaje más estable pero más lento.
-  \item \textbf{Factor de descuento (\(\gamma\)):} Determina la importancia de las recompensas futuras. Un valor alto de \(\gamma\) hace que el agente valore más las recompensas futuras, lo que es esencial para tareas donde las decisiones tempranas afectan significativamente las recompensas futuras.
-  \item \textbf{Estrategia de exploración (\(\epsilon\) en \(\epsilon\)-greedy):} Controla el balance entre exploración y explotación. Un valor alto de \(\epsilon\) fomenta la exploración, lo que es crucial al inicio del aprendizaje, mientras que un valor bajo de \(\epsilon\) fomenta la explotación de acciones conocidas.\newline
+  \item \textbf{Factor de descuento (\(\gamma\)):} Determina la importancia de las recompensas futuras. Un valor alto de \(\gamma\) hace que el agente valore más las recompensas futuras, mientras que un valor bajo de \(\gamma\) se centra más en las recompensas inmediatas.
+  \item \textbf{Estrategia de exploración (\(\epsilon\) en \(\epsilon\)-greedy):} Controla el balance entre exploración y explotación. Un valor alto de \(\epsilon\) fomenta la exploración, mientras que un valor bajo de \(\epsilon\) fomenta la explotación de acciones conocidas.\newline
 \end{itemize}
 
 \subsection{Trabajos relacionados}
@@ -193,25 +195,24 @@ Para un mejor entendimiento de cómo realizar la implementación de los algoritm
 
 \section{Implementación}
 
-En esta sección, describiremos el método implementado en nuestro trabajo. Abordaremos los siguientes aspectos:
+En esta sección, describiremos el método implementado en nuestro trabajo. Abordaremos los siguientes dos aspectos:
 
 \begin{itemize}
   \item Descripción del entorno de trabajo.
   \item Detalles de la implementación de los algoritmos de aprendizaje por refuerzo (Q-Learning, Montecarlo y SARSA).
-  \item Proceso experimental y evaluación de los resultados.
 \end{itemize}
 
 \subsection{Descripción del entorno de trabajo}
 
-En el desarrollo de este trabajo, se empleó un entorno de simulación implementado en un Jupyter Notebook. El entorno de simulación se basó en un mapa de ejemplo proporcionado en el trabajo, el cual consiste en una cuadrícula que representa el entorno en el que se moverá el robot móvil. La cuadrícula está compuesta por casillas, algunas de las cuales contienen obstáculos (representadas con unos), mientras que otras están libres de ellos (representadas con ceros).
+En el desarrollo de este trabajo, se empleó un entorno de simulación implementado en un Jupyter Notebook. El entorno de simulación se basó en un mapa de ejemplo proporcionado en el trabajo, el cual consiste en una cuadrícula que representa el entorno en el que se moverá el robot móvil. La cuadrícula está compuesta por casillas, algunas de las cuales contienen obstáculos (representadas con unos), mientras que otras están libres de ellos (representadas con ceros).\newline
 
-A partir del mapa de ejemplo, se generaron dos mapas adicionales para aumentar la variabilidad en los escenarios de prueba. Estos mapas proporcionaron diferentes configuraciones de entorno para evaluar el desempeño de los algoritmos de aprendizaje por refuerzo.
+A partir del mapa de ejemplo, se generaron dos mapas adicionales para aumentar la variabilidad en los escenarios de prueba. Estos mapas proporcionaron diferentes configuraciones de entorno para evaluar el desempeño de los algoritmos de aprendizaje por refuerzo.\newline
 
-Las casillas iniciales y destino fueron seleccionadas aleatoriamente dentro de cada mapa generado, asegurándose de que ninguna de ellas fuera una casilla con obstáculos. Esta selección aleatoria garantizó la variabilidad en los escenarios de prueba y permitió evaluar el desempeño de los algoritmos en diferentes configuraciones del entorno.
+Las casillas inicial y de destino fueron seleccionadas aleatoriamente dentro de cada mapa generado, asegurándose de que ninguna de ellas contuviera obstáculos. Esta selección aleatoria garantizó la variabilidad en los escenarios de prueba y permitió evaluar el desempeño de los algoritmos en diferentes configuraciones del entorno.\newline
 
-En este entorno simulado, el robot móvil parte de una casilla inicial aleatoria y tiene como objetivo llegar a una casilla destino específica. Durante la simulación, el robot puede moverse entre casillas adyacentes en la cuadrícula, siguiendo una política determinada por los algoritmos de aprendizaje por refuerzo implementados. La interacción del robot con el entorno se realiza mediante acciones discretas.
+En este entorno simulado, el robot móvil parte de una casilla inicial aleatoria y tiene como objetivo llegar a una casilla destino específica. Durante la simulación, el robot puede moverse entre casillas adyacentes en la cuadrícula, siguiendo una política determinada por los algoritmos de aprendizaje por refuerzo implementados. La interacción del robot con el entorno se realiza mediante acciones discretas.\newline
 
-Este enfoque de simulación proporcionó un entorno controlado y reproducible para evaluar el rendimiento de los algoritmos de aprendizaje por refuerzo en la planificación de rutas de robots móviles. Además, permitió explorar diferentes estrategias de navegación y analizar su efectividad en la resolución de problemas de planificación de rutas en entornos con obstáculos.
+Este enfoque de simulación proporcionó un entorno controlado y reproducible para evaluar el rendimiento de los algoritmos de aprendizaje por refuerzo en la planificación de rutas de robots móviles. Además, permitió explorar diferentes estrategias de navegación y analizar su efectividad en la resolución de problemas de planificación de rutas en entornos con obstáculos.\newline
 
 \begin{figure}[h]
   \centering
@@ -227,21 +228,21 @@ Aquí se describen las funciones auxiliares que han sido utilizadas en la implem
 
 1. Método para leer el mapa de un fichero de texto
 
-
 \begin{figure}[h]
   \begin{pseudo}*
     \hd{\fn{lee\_mapa}}(\textit{fichero}) \\*
     \multicolumn{2}{l}{\textbf{Entrada}: Nombre del archivo \textit{fichero}} \\*
-    \multicolumn{2}{l}{\textbf{Salida}: Matriz que representa el mapa y dimensiones del mapa} \\*
+    \multicolumn{2}{l}{\textbf{Salida}: Matriz que representa el mapa y el objetivo} \\*
     \multicolumn{2}{l}{\textbf{Algoritmo}:}\\
-    Leer las líneas del archivo \textit{fichero} y convertirlas a matriz \\
+    Leer las líneas del archivo \textit{fichero}\\
+    y convertirlas a matriz\\
     Devolver la matriz y sus dimensiones
   \end{pseudo}
   \caption{Pseudocódigo de la función \texttt{lee\_mapa}.}
   \label{fig:lee_mapa}
 \end{figure}
 
-2. Método para comprobar si una casilla contiene un obstáculos\newline
+2. Método para comprobar si una casilla contiene un obstáculo\newline
 
 \begin{figure}[h]
   \begin{pseudo}*
@@ -353,7 +354,7 @@ Siendo \textit{nav\_estados} la variable global con todos los estados del entorn
     \> Inicializar los valores de \textit{estado} a cero en la tabla Q \\
     \\
     \textbf{Si} un número aleatorio entre 0 y 1 es menor que \textit{epsilon}\\
-    \> \textbf{Seleccionar} una acción aleatoria de entre todas las posibles \\
+    \> \textbf{Seleccionar} una acción aleatoria \\
     \textbf{Si no} \\
     \> \textbf{Seleccionar} la mejor acción conocida \\
     \\
@@ -405,12 +406,14 @@ Siendo \textit{nav\_estados} la variable global con todos los estados del entorn
   \end{pseudo}
   \caption{Pseudocódigo de la función \texttt{obtiene\_recompensa}.}
   \label{fig:obtiene_recompensa}
-\end{figure}
-
-En este caso, \textit{recompensa\_objetivo\_alcanzado}, \textit{penalizacion\_colision}, \textit{penalizacion\_esperar} y \textit{penalizacion\_casilla\_adyacente\_obstaculo}
+  \vspace{0.5cm} 
+  En este caso, \textit{recompensa\_objetivo\_alcanzado}, \textit{penalizacion\_colision}, \textit{penalizacion\_esperar} y \textit{penalizacion\_casilla\_adyacente\_obstaculo}
 son variables globales que se usan en el método para definir el valor de la recompensa en diferentes situaciones.\newline
 
 Tras presentar todas las funciones auxiliares utilizadas en la implementación de los algoritmos, procedemos a detallar la implementación de Q-Learning, Montecarlo y SARSA.\newline 
+
+\end{figure}
+
 
 \textbf{Q-Learning\newline}
 
@@ -418,34 +421,33 @@ En primer lugar, nos encontramos con el algoritmo de Q-Learning. Los valores de 
 No obstante, en la siguiente sección se detallarán los experimentos y pruebas realizadas.\newline\newline\newline
 
 \begin{figure}[h]
-  \begin{pseudo}
+  \begin{pseudo}[compact]
     \textbf{Q-Learning}: \\
     Inicializar $Q$ como diccionario vacío \\
     Parámetros: $\alpha = 0.2$, $\gamma = 0.9$, $\epsilon = 0.3$, \\ $epocas = 5000$, $max\_pasos = 100$ \\
     Para cada época: \\
     \> Estado aleatorio sin obstáculos \\
     \> Para cada paso: \\
-    \> \textit{accion\_index} $\leftarrow$ escoger\_accion(\textit{estado}, $\epsilon$) \\
-    \> \textit{accion} $\leftarrow$ nav\_acciones[\textit{accion\_index}] \\
-    \> Aplicar acción, obtener nuevo estado y recompensa \\
-    Si \textit{estado} \textnormal{no está en} \textit{Q\_table} entonces \\+
+    \> \> \textit{accion\_index} $\leftarrow$ escoger\_accion(\textit{estado}, $\epsilon$) \\
+    \> \> \textit{accion} $\leftarrow$ nav\_acciones[\textit{accion\_index}] \\
+    \> \> Aplicar acción, obtener nuevo estado y recompensa \\
+    Si \textit{estado} no está en \textit{Q\_table} entonces \\+
       Inicializar \textit{Q\_table}[\textit{estado}] con ceros \\-
     \textbf{Fin Si} \\
-    Si \textit{nuevo\_estado} \textnormal{no está en} \textit{Q\_table} entonces \\+
+    Si \textit{nuevo\_estado} no está en \textit{Q\_table} entonces \\+
       Inicializar \textit{Q\_table}[\textit{nuevo\_estado}] con ceros \\-
     \textbf{Fin Si} \\
-    \textit{mejor\_accion\_nueva} $\leftarrow$ máximo de \textit{Q\_table}[\textit{nuevo\_estado}] \\
+    \textit{mejor\_accion\_nueva} $\leftarrow$ max\textit{Q\_table}[\textit{nuevo\_estado}] \\
     \textit{Q\_table}[\textit{estado}][\textit{accion}] $\leftarrow$ \textit{Q\_table}[\textit{estado}][\textit{accion}] + \\
-    \> \textit{alpha} * (\textit{recompensa} + \textit{gamma} * \textit{mejor\_accion\_nueva} - \\
-    \> \textit{Q\_table}[\textit{estado}][\textit{accion}])\\
+    \> \textit{alpha} * (\textit{recompensa} + \textit{gamma} * \textit{mejor\_accion\_nueva}\\
+    \> - \textit{Q\_table}[\textit{estado}][\textit{accion}])\\
     \> Si estado destino o terminal, terminar \\
   \end{pseudo}
   \caption{Pseudocódigo del algoritmo Q-Learning.}
   \label{fig:q-learning}
 \end{figure}
 
-Del pseudocódigo se puede ver cómo Q-Learning sigue un enfoque \textit{off-policy}, ya que, al actualizar su tabla de valores Q,
-no tiene en cuenta la política que está siguiendo el robot y elige la acción que maximice la recompensa esperada en el nuevo estado.\newline
+
 
 \textbf{SARSA\newline}
 
@@ -454,26 +456,27 @@ se han seleccionado de manera que optimicen el rendimiento del algoritmo.
 
 \begin{figure}[!h]
   \begin{minipage}{\linewidth}
-  \begin{pseudo}
-  \textbf{SARSA}: \\
-  Inicializar $Q\_table$ como diccionario vacío \\
-  Parámetros: $\alpha = 0.1$, $\gamma = 0.9$, $\epsilon = 0.3$, \\ $num\_episodios = 100000$, $max\_pasos = 100$ \\
-  Para cada episodio: \\
-  \> Estado aleatorio sin obstáculos \\
-  \> \textit{accion\_index} $\leftarrow$ escoger\_accion(\textit{estado}, $\epsilon$) \\
-  \> \textit{accion} $\leftarrow$ nav\_acciones[\textit{accion\_index}] \\
-  \> Para cada paso: \\
-  \> \> Aplicar acción, obtener nuevo estado y recompensa \\
-  \> \> \textit{nueva\_accion\_index} $\leftarrow$ escoger\_accion(\textit{nuevo\_estado}, $\epsilon$) \\
-  \> \> \textit{nueva\_accion} $\leftarrow$ nav\_acciones[\textit{nueva\_accion\_index}] \\
-  Si \textit{estado} \textnormal{no está en} \textit{Q\_table} entonces \\+
-  Inicializar \textit{Q\_table}[\textit{estado}] con ceros \\-
-
-  \end{pseudo}
+    \begin{pseudo}[compact]
+      \textbf{SARSA}: \\
+      Inicializar $Q\_table$ como diccionario vacío \\
+      Parámetros: $\alpha = 0.1$, $\gamma = 0.9$, $\epsilon = 0.3$, \\ $num\_episodios = 100000$, $max\_pasos = 100$ \\
+      Para cada episodio: \\
+      \> Estado aleatorio sin obstáculos \\
+      \> \textit{accion\_index} $\leftarrow$ escoger\_accion(\textit{estado}, $\epsilon$) \\
+      \> \textit{accion} $\leftarrow$ nav\_acciones[\textit{accion\_index}] \\
+      \> Para cada paso: \\
+      \> \> Aplicar acción, obtener nuevo estado y recompensa \\
+      \> \> \textit{nueva\_accion\_index} $\leftarrow$ \\
+      \> \> \> escoger\_accion(\textit{nuevo\_estado}, $\epsilon$) \\
+      \> \> \textit{nueva\_accion} $\leftarrow$ nav\_acciones[\textit{nueva\_accion\_index}] \\
+      Si \textit{estado} no está en \textit{Q\_table} entonces \\+
+      Inicializar \textit{Q\_table}[\textit{estado}] con ceros \\-
+    \end{pseudo}
   \end{minipage}
   \caption{Pseudocódigo del algoritmo SARSA (Parte 1).}
   \label{fig:sarsa1}
 \end{figure}
+
 
 \begin{figure}
   \begin{minipage}{\linewidth}
@@ -493,10 +496,11 @@ se han seleccionado de manera que optimicen el rendimiento del algoritmo.
   \end{minipage}
   \caption{Pseudocódigo del algoritmo SARSA (Parte 2).}
   \label{fig:sarsa2}
+  \vspace{0.5cm} 
+  En esta ocasión, al actualizar los valores de la tabla Q, el robot tiene en cuenta la política que está siguiendo. Esto es debido a su enfoque \textit{on-policy}, diferenciándolo de esta manera del algoritmo de Q-Learning.\newline
 \end{figure}
 
 
-En esta ocasión, al actualizar los valores de la tabla Q, el robot tiene en cuenta la política que está siguiendo. Esto es debido a su enfoque \textit{on-policy}, diferenciándolo de esta manera del algoritmo de Q-Learning.\newline
 
 \section{Pruebas y experimentación}
 En esta sección, se detallan los experimentos realizados y los resultados obtenidos al aplicar tres algoritmos de aprendizaje por refuerzo (Q-Learning, Montecarlo y SARSA) 
@@ -524,21 +528,21 @@ A continuación, se presentan los resultados obtenidos en cada uno de los mapas 
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.38]{resultado_qlearning_mapa_1}
+  \includegraphics[scale=0.33]{resultado_qlearning_mapa_1}
   \caption{Resultados Q-Learning mapa 1}
   \label{fig:resultado_qlearning_mapa_1}
 \end{figure}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.38]{resultado_qlearning_mapa_2}
+  \includegraphics[scale=0.33]{resultado_qlearning_mapa_2}
   \caption{Resultados Q-Learning mapa 2}
   \label{fig:resultado_qlearning_mapa_2}
 \end{figure}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.38]{resultado_qlearning_mapa_3}
+  \includegraphics[scale=0.33]{resultado_qlearning_mapa_3}
   \caption{Resultados Q-Learning mapa 3}
   \label{fig:resultado_qlearning_mapa_3}
 \end{figure}
@@ -568,27 +572,26 @@ estos son los resultados obtenidos en cada uno de los mapas:
 \end{figure}
 
 \begin{figure}[h]
-  \centering
   \includegraphics[scale=0.33]{resultado_2_qlearning_mapa_3}
   \caption{Resultados Q-Learning mapa 3 tras modificar el número de épocas}
   \label{fig:resultado_2_qlearning_mapa_3}
+  \vspace{0.5cm}
+  Como se puede apreciar, los resultados no son tan satisfactorios, ya que el robot colisiona con los obstáculos en ciertas ocasiones y no suele seleccionar la ruta más eficiente para llegar a la casilla objetivo. 
+  Este empeoramiento de los resultados es más notorio en los mapas 1 y 3, lo cual tiene sentido porque, al ser mapas más grandes, requieren un mayor número de épocas de entrenamiento para que el agente aprenda la política óptima.\newline
 \end{figure}
-
-Como se puede apreciar, los resultados no son tan satisfactorios, ya que el robot colisiona con los obstáculos en ciertas ocasiones y no suele seleccionar la ruta más eficiente para llegar a la casilla objetivo. 
-Este empeoramiento de los resultados es más notorio en los mapas 1 y 3, lo cual tiene sentido porque, al ser mapas más grandes, requieren un mayor número de épocas de entrenamiento para que el agente aprenda la política óptima.\newline
 
 \subsubsection{\textbf{SARSA}}
 
 En la implementación del algoritmo SARSA, los valores de los hiperparámetros se ajustaron según el mapa. En el mapa 2 (el más simple de todos), aumentamos la tasa de aprendizaje a 0.5 para que el agente pudiera aprender rápidamente sin una excesiva preocupación por desbordamientos en los valores Q.
 Además, reducimos el factor de descuento a 0.5, ya que en un mapa más pequeño las recompensas futuras no son tan importantes como las inmediatas, dado que el objetivo está más cerca.
-Mantenemos el valor de epsilon muy bajo, en 0.1, pues la simpleza del mapa permite que este pueda ser explorado completamente de manera rápida.
+Mantenemos el valor de epsilon muy bajo, en 0.1, pues la simpleza del mapa permite que este pueda ser explorado completamente de manera rápida.\newline
 
-En los otros dos mapas, al ser entornos más complejos, disminuimos la tasa de aprendizaje y aumentamos tanto el factor de descuento como la tasa de exploración. Estas modificaciones permiten que el agente explore más y valore mejor las recompensas a largo plazo, necesarios en escenarios más complicados.
+En los otros dos mapas, al ser entornos más complejos, disminuimos la tasa de aprendizaje y aumentamos tanto el factor de descuento como la tasa de exploración. Estas modificaciones permiten que el agente explore más y valore mejor las recompensas a largo plazo, necesarios en escenarios más complicados.\newline
 
 Finalmente, es importante destacar que el número de episodios de entrenamiento es significativamente mayor que en Q-Learning. Esto se debe a que SARSA, al tener un enfoque \textit{on-policy}, normalmente converge más lentamente hacia una política óptima, especialmente cuando la estrategia de exploración no se 
-maneja adecuadamente~\cite{b4}. Por ello, consideramos necesario aumentar el número de iteraciones del algoritmo.
+maneja adecuadamente~\cite{b4}. Por ello, consideramos necesario aumentar el número de iteraciones del algoritmo.\newline
 
-A continuación, se presentan los resultados obtenidos en cada uno de los mapas de prueba:
+A continuación, se presentan los resultados obtenidos en cada uno de los mapas de prueba:\newline
 
 \begin{figure}[h]
   \centering
@@ -606,7 +609,7 @@ A continuación, se presentan los resultados obtenidos en cada uno de los mapas 
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.25]{resultado_sarsa_mapa_3}
+  \includegraphics[scale=0.33]{resultado_sarsa_mapa_3}
   \caption{Resultados SARSA mapa 3}
   \label{fig:resultado_sarsa_mapa_3}
 \end{figure}
@@ -640,10 +643,14 @@ así su capacidad de generalización y adaptabilidad.
   \begin{thebibliography}{99}
   \bibitem{b1} Richard S. Sutton y Andrew G. Barto. Reinforcement Learning: An Introduction.
   MIT Press, 2018.
-  \bibitem{b2} https://www.codificandobits.com/curso/aprendizaje-por-refuerzo-nivel-basico/2-ejemplos-reales-aplicacion-aprendizaje-por-refuerzo/
+  \bibitem{b2}  Russell, Stuart and Norvig, Peter. Artificial Intelligence: A Modern Approach
+  (2010). Chapter 21.
   \bibitem{b3} https://www.aprendemachinelearning.com/aprendizaje-por-refuerzo/
   \bibitem{b4} https://www.javatpoint.com/sarsa-reinforcement-learning
   \bibitem{b5} https://es.wikipedia.org/wiki/Q-learning
+  \bibitem{b6} https://www.codificandobits.com/curso/aprendizaje-por-refuerzo-nivel-basico/2-ejemplos-reales-aplicacion-aprendizaje-por-refuerzo/
+  \bibitem{b7} https://aws.amazon.com/es/what-is/reinforcement-learning/
+
   \end{thebibliography}
   \caption{Referencias bibliográficas.}
   \label{fig:bibliography}
