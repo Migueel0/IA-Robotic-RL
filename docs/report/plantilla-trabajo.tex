@@ -144,7 +144,7 @@ Donde:
     \item \(\max_{a'} Q(s', a')\) es el valor máximo esperado para cualquier acción posible en el estado \(s'\).\newline
 \end{itemize}
 
-Se trata de un algoritmo con un enfoque \textit{off-policy}, lo que significa que aprende la función de valor óptima independientemente de la política que el agente esté siguiendo en el momento. Q-Learning actualiza la estimación de la función Q utilizando la recompensa inmediata y el valor máximo de la función Q para el siguiente estado y acción.\newline
+Se trata de un algoritmo con un enfoque \textit{off-policy}, lo que significa que aprende la función de valor óptima independientemente de la política que el agente esté siguiendo en el momento. Q-Learning actualiza la estimación de la función Q utilizando la recompensa inmediata y el valor máximo de la función Q para el siguiente estado y acción~\cite{b1}~\cite{b4}~\cite{b5}.\newline
 
 \textbf{Hiperparámetros en Q-Learning}
 \begin{itemize}
@@ -175,7 +175,8 @@ Donde:
     \item \(a'\) es la acción tomada en el estado siguiente \(s'\).\newline
 \end{itemize}
 
-En este caso, se puede apreciar que la acción utilizada para actualizar la tabla Q en el siguiente estado es la seleccionada por la política actual. Al seguir un enfoque \textit{on-policy}, SARSA, por lo general, suele ser un algoritmo más lento en la convergencia a la política óptima, especialmente en entornos complejos.\newline
+En este caso, se puede apreciar que la acción utilizada para actualizar la tabla Q en el siguiente estado es la seleccionada por la política actual. Al seguir un enfoque \textit{on-policy}, SARSA, por lo general, suele ser un algoritmo más lento en la convergencia a la política óptima, especialmente en entornos complejos donde se requiere la 
+exploración de numerosas acciones~\cite{b4}.\newline
 
 \textbf{Hiperparámetros en SARSA}
 \begin{itemize}
@@ -456,7 +457,7 @@ se han seleccionado de manera que optimicen el rendimiento del algoritmo.
   \begin{pseudo}
   \textbf{SARSA}: \\
   Inicializar $Q\_table$ como diccionario vacío \\
-  Parámetros: $\alpha = 0.1$, $\gamma = 0.9$, $\epsilon = 0.1$, \\ $num\_episodios = 100000$, $max\_pasos = 100$ \\
+  Parámetros: $\alpha = 0.1$, $\gamma = 0.9$, $\epsilon = 0.3$, \\ $num\_episodios = 100000$, $max\_pasos = 100$ \\
   Para cada episodio: \\
   \> Estado aleatorio sin obstáculos \\
   \> \textit{accion\_index} $\leftarrow$ escoger\_accion(\textit{estado}, $\epsilon$) \\
@@ -578,11 +579,14 @@ Este empeoramiento de los resultados es más notorio en los mapas 1 y 3, lo cual
 
 \subsubsection{\textbf{SARSA}}
 
-En la implementación del algoritmo SARSA, los valores de los hiperparámetros se ajustaron según el mapa. En el mapa 2 (el más simple de todos), aumentamos la tasa de aprendizaje a 0.5 para que el agente pudiera aprender rápidamente sin una excesiva preocupación por desbordamientos en los valores Q. Además, reducimos el factor de descuento a 0.5, ya que en un mapa más pequeño las recompensas futuras no son tan importantes como las inmediatas, dado que el objetivo está más cerca. Mantenemos el valor de epsilon muy bajo, en 0.1, pues la simpleza del mapa permite que este pueda ser explorado completamente de manera rápida.
+En la implementación del algoritmo SARSA, los valores de los hiperparámetros se ajustaron según el mapa. En el mapa 2 (el más simple de todos), aumentamos la tasa de aprendizaje a 0.5 para que el agente pudiera aprender rápidamente sin una excesiva preocupación por desbordamientos en los valores Q.
+Además, reducimos el factor de descuento a 0.5, ya que en un mapa más pequeño las recompensas futuras no son tan importantes como las inmediatas, dado que el objetivo está más cerca.
+Mantenemos el valor de epsilon muy bajo, en 0.1, pues la simpleza del mapa permite que este pueda ser explorado completamente de manera rápida.
 
 En los otros dos mapas, al ser entornos más complejos, disminuimos la tasa de aprendizaje y aumentamos tanto el factor de descuento como la tasa de exploración. Estas modificaciones permiten que el agente explore más y valore mejor las recompensas a largo plazo, necesarios en escenarios más complicados.
 
-Finalmente, es importante destacar que el número de episodios de entrenamiento es significativamente mayor que en Q-Learning. Esto se debe a que SARSA, al tener un enfoque \textit{on-policy}, normalmente converge más lentamente hacia una política óptima. Por ello, consideramos necesario aumentar el número de iteraciones del algoritmo.
+Finalmente, es importante destacar que el número de episodios de entrenamiento es significativamente mayor que en Q-Learning. Esto se debe a que SARSA, al tener un enfoque \textit{on-policy}, normalmente converge más lentamente hacia una política óptima, especialmente cuando la estrategia de exploración no se 
+maneja adecuadamente~\cite{b4}. Por ello, consideramos necesario aumentar el número de iteraciones del algoritmo.
 
 A continuación, se presentan los resultados obtenidos en cada uno de los mapas de prueba:
 
@@ -607,19 +611,39 @@ A continuación, se presentan los resultados obtenidos en cada uno de los mapas 
   \label{fig:resultado_sarsa_mapa_3}
 \end{figure}
 
-Tras implementar y ejecutar el algoritmo SARSA con los hiperparámetros descritos anteriormente, los resultados obtenidos fueron comparativamente inferiores a los logrados con Q-Learning y Montecarlo. En primer lugar, las rutas generadas por SARSA fueron, en promedio, más largas y menos directas. Además, se observó que el agente colisionó con obstáculos con mayor frecuencia, lo que indica que el robot no aprendió completamente a esquivar los obstáculos. Por último, SARSA mostró una convergencia más lenta hacia una política óptima. A pesar del aumento en el número de episodios de entrenamiento, la política aprendida no alcanzó el mismo nivel de eficacia que las aprendidas con los otros algoritmos.
+Tras implementar y ejecutar el algoritmo SARSA con los hiperparámetros descritos anteriormente, los resultados obtenidos fueron comparativamente inferiores a los logrados con Q-Learning y Montecarlo. 
+En primer lugar, las rutas generadas por SARSA fueron, en promedio, más largas y menos directas. Además, se observó que el agente colisionó con obstáculos con mayor frecuencia, lo que indica que el robot no aprendió completamente a esquivar los obstáculos. Por último, SARSA mostró una convergencia más lenta hacia una política óptima. 
+A pesar del aumento en el número de episodios de entrenamiento, la política aprendida no alcanzó el mismo nivel de eficacia que las aprendidas con los otros algoritmos.\newline
 
 Una observación interesante es que, a diferencia de Q-Learning, los hiperparámetros en este algoritmo tienen una mayor relevancia en su ejecución, evidenciándose caídas en el rendimiento cuando se probaban con valores alejados a los explicados con anterioridad.
+
+\section{Conclusiones}
+
+En este trabajo, se ha llevado a cabo una comparación exhaustiva de tres algoritmos de aprendizaje por refuerzo (Q-Learning, Montecarlo y SARSA) aplicados a la planificación de rutas para un robot móvil en un entorno con obstáculos.
+Se diseñaron y probaron tres mapas diferentes, variando en tamaño y densidad de obstáculos, para evaluar la capacidad de cada algoritmo para generar rutas seguras y eficientes. Los resultados obtenidos se analizaron 
+en términos de la longitud de las rutas generadas, la frecuencia de colisiones y la convergencia hacia políticas óptimas.\newline
+
+Los experimentos demostraron que Q-Learning y Montecarlo proporcionaron resultados superiores en comparación con SARSA. Q-Learning generó rutas más cortas y directas, y mostró una alta 
+capacidad para evitar colisiones incluso en entornos complejos. Montecarlo también tuvo un buen rendimiento, aunque su convergencia fue más lenta en comparación con Q-Learning. Por otro lado,
+SARSA presentó rutas más largas y menos directas, con una mayor frecuencia de colisiones y una convergencia más lenta, incluso con un mayor número de episodios de entrenamiento.
+Además, los resultados de SARSA fueron más sensibles a los valores de los hiperparámetros, mostrando una caída significativa en el rendimiento cuando se alejaban de los valores óptimos.\newline
+
+Las conclusiones principales de este trabajo indican que Q-Learning es el algoritmo más robusto y eficiente para la tarea de planificación de rutas en entornos con obstáculos, seguido de Montecarlo. 
+SARSA, aunque conceptualmente sólido, mostró limitaciones en términos de eficiencia y robustez en comparación con los otros dos algoritmos. La sensibilidad de SARSA a los hiperparámetros sugiere que 
+requiere una mayor afinación para obtener resultados competitivos.\newline
+
+Como ideas de mejora y trabajo futuro, se podría investigar la combinación de estos algoritmos con técnicas de aprendizaje profundo, como Deep Q-Learning, para manejar entornos más complejos y
+de mayor dimensionalidad. Además, se podría explorar la integración de mecanismos de aprendizaje transferencial para permitir al robot aplicar conocimientos previos a nuevos entornos, mejorando
+así su capacidad de generalización y adaptabilidad.
+
 \begin{figure}[h!]
   \begin{thebibliography}{99}
   \bibitem{b1} Richard S. Sutton y Andrew G. Barto. Reinforcement Learning: An Introduction.
   MIT Press, 2018.
   \bibitem{b2} https://www.codificandobits.com/curso/aprendizaje-por-refuerzo-nivel-basico/2-ejemplos-reales-aplicacion-aprendizaje-por-refuerzo/
   \bibitem{b3} https://www.aprendemachinelearning.com/aprendizaje-por-refuerzo/
-  \bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
+  \bibitem{b4} https://www.javatpoint.com/sarsa-reinforcement-learning
   \bibitem{b5} https://es.wikipedia.org/wiki/Q-learning
-  \bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
-  \bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
   \end{thebibliography}
   \caption{Referencias bibliográficas.}
   \label{fig:bibliography}

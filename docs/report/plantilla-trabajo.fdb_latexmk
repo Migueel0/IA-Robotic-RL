@@ -1,8 +1,8 @@
 # Fdb version 4
-["pdflatex"] 1717947500.92105 "c:/Users/david/OneDrive/Escritorio/uni/IA/IA-Robotic-RL/docs/report/plantilla-trabajo.tex" "plantilla-trabajo.pdf" "plantilla-trabajo" 1717947502.98303 0
+["pdflatex"] 1718006650.79918 "c:/Users/david/OneDrive/Escritorio/uni/IA/IA-Robotic-RL/docs/report/plantilla-trabajo.tex" "plantilla-trabajo.pdf" "plantilla-trabajo" 1718006652.99225 0
   "Ejemplo_mapa.png" 1717664745 1678 432acb516d9aac16f35a04fc4f976647 ""
   "Reinforcement_learning_diagram.png" 1717576375 12662 20177d55f7b4cb6cbe8959c61cd1cc34 ""
-  "c:/Users/david/OneDrive/Escritorio/uni/IA/IA-Robotic-RL/docs/report/plantilla-trabajo.tex" 1717947497 37519 ce62d5a056038cdb100188a4ee7f25db ""
+  "c:/Users/david/OneDrive/Escritorio/uni/IA/IA-Robotic-RL/docs/report/plantilla-trabajo.tex" 1718006647 39662 e18939ad688bf13c63d9333263b5e4e3 ""
   "c:/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc" 1717574229 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "c:/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1717574545 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2024/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1717573994 960 379cc0019370a9e0208a0a3f949f847a ""
@@ -74,8 +74,8 @@
   "c:/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1717577448 5528846 47cdb80fb017a8505c1f8b75ba228bf0 ""
   "c:/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1717577585 8238500 6d5537a7d7245be4f9da238ae7505c85 ""
   "c:/texlive/2024/texmf.cnf" 1717577427 713 e69b156964470283e0530f5060668171 ""
-  "plantilla-trabajo.aux" 1717947502 6717 46a4c643e827279db0e093c1e5f91438 "pdflatex"
-  "plantilla-trabajo.tex" 1717947497 37519 ce62d5a056038cdb100188a4ee7f25db ""
+  "plantilla-trabajo.aux" 1718006652 6855 6a3744a3de105aa6eaf2eecfef23df2a "pdflatex"
+  "plantilla-trabajo.tex" 1718006647 39662 e18939ad688bf13c63d9333263b5e4e3 ""
   "resultado_2_qlearning_mapa_1.png" 1717858366 94088 6fb5c2176c2a3b7b99d24763b4515b82 ""
   "resultado_2_qlearning_mapa_2.png" 1717858556 62680 d0f837870f94ca87ca4afe175a4a8f6b ""
   "resultado_2_qlearning_mapa_3.png" 1717858981 121208 ade50fbdda63402413facc1b647081f8 ""
