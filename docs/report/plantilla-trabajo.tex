@@ -48,12 +48,12 @@
   
   \and
   
-  \IEEEauthorblockN{Nombre y apellidos alumno 2}
+  \IEEEauthorblockN{Miguel Galán Lerate}
   \IEEEauthorblockA{
     \textit{Dpto. Ciencias de la Computación e Inteligencia Artificial}\\
     \textit{Universidad de Sevilla}\\
     Sevilla, España\\
-    Correos electrónicos UVUS y de contacto (si distinto)}
+    miggaller@alum.us.es}
 }
 
 \maketitle
@@ -154,7 +154,30 @@ Se trata de un algoritmo con un enfoque \textit{off-policy}, lo que significa qu
 \end{itemize}
 
 
-\subsubsection{\textbf{Montecarlo}}
+\subsubsection{\textbf{Algoritmo de Montecarlo}}
+El algoritmo de Montecarlo es otro método de aprendizaje por refuerzo basado en valores que se utiliza para encontrar la política óptima de selección de acciones en un entorno determinado. A diferencia de Q-Learning, que actualiza sus estimaciones de valor de manera incremental y en cada paso del episodio, los métodos de Montecarlo actualizan sus estimaciones solo al final de un episodio completo, utilizando las recompensas acumuladas desde el inicio del episodio hasta el final.
+
+El algoritmo de Montecarlo no requiere un modelo del entorno y puede manejar problemas con transiciones estocásticas y recompensas. Sin embargo, a diferencia de Q-Learning, necesita episodios completos para actualizar las estimaciones, lo que puede hacer que sea menos eficiente en entornos donde los episodios son largos o difíciles de completar~\cite{b5}.
+
+En el método de Montecarlo, el agente explora el entorno y actualiza la estimación del valor de una acción en un estado específico utilizando la recompensa acumulada observada. La ecuación para el cálculo de la utilidad es:
+
+\[
+U \leftarrow \sum_{i=t}^{T} \gamma^{i-t} R_i
+\]
+
+
+Donde:
+\begin{itemize}
+    \item \(\gamma\) es el factor descuento que determina la importancia de las recompensas futuras en comparación con las recompensas inmediatas.
+    \item \(R_i\) es el retorno (recompensa acumulada) del \(i\)-ésimo episodio en el que se ha visitado el par \((s, a)\).
+\end{itemize}
+
+\textbf{Hiperparámetros en el Algoritmo de Montecarlo}
+\begin{itemize}
+  \item \textbf{Número de episodios:} La cantidad total de episodios que se utilizan para entrenar el algoritmo. Un mayor número de episodios puede permitir un mejor aprendizaje, aunque también incrementa el tiempo de entrenamiento..
+  \item \textbf{Descuento de recompensas (\(\gamma\)):}  Determina la importancia de las recompensas futuras. Un valor alto de \(\gamma\) hace que el agente valore más las recompensas futuras, mientras que un valor bajo de \(\gamma\) se centra más en las recompensas inmediatas.
+\end{itemize}
+
 
 \subsubsection{\textbf{SARSA}}
 El algoritmo SARSA (State-Action-Reward-State-Action) es un algoritmo de aprendizaje por refuerzo que se utiliza para aprender una política óptima en un entorno de Markov discreto. Es bastante similar al algoritmo Q-Learning, 
@@ -225,10 +248,8 @@ Este enfoque de simulación proporcionó un entorno controlado y reproducible pa
 
 \textbf{Funciones auxiliares\newline}
 Aquí se describen las funciones auxiliares que han sido utilizadas en la implementación de los algoritmos de aprendizaje por refuerzo.\newline
-
+\newline\newline\newline\newline
 1. Método para leer el mapa de un fichero de texto
-
-\begin{figure}[h]
   \begin{pseudo}*
     \hd{\fn{lee\_mapa}}(\textit{fichero}) \\*
     \multicolumn{2}{l}{\textbf{Entrada}: Nombre del archivo \textit{fichero}} \\*
@@ -237,14 +258,10 @@ Aquí se describen las funciones auxiliares que han sido utilizadas en la implem
     Leer las líneas del archivo \textit{fichero}\\
     y convertirlas a matriz\\
     Devolver la matriz y sus dimensiones
-  \end{pseudo}
-  \caption{Pseudocódigo de la función \texttt{lee\_mapa}.}
-  \label{fig:lee_mapa}
-\end{figure}
+  \end{pseudo}/
 
-2. Método para comprobar si una casilla contiene un obstáculo\newline
 
-\begin{figure}[h]
+2. Método para comprobar si una casilla contiene un obstáculo
   \begin{pseudo}*
     \hd{\fn{hay\_colision}}(\textit{estado}) \\*
     \multicolumn{2}{l}{\textbf{Entrada}: Casilla en la que se encuentra el robot \textit{estado}} \\*
@@ -253,13 +270,8 @@ Aquí se describen las funciones auxiliares que han sido utilizadas en la implem
     Verificar si hay un obstáculo en \textit{estado} \\
     Devolver \textbf{true} si hay colisión, \textbf{false} en caso contrario
   \end{pseudo}
-  \caption{Pseudocódigo del método \texttt{hay\_colision}.}
-  \label{fig:hay_colision}
-\end{figure}
-
+  
 3. Método para aplicar una acción en un estado
-
-\begin{figure}[h]
   \begin{pseudo}*
     \hd{\fn{aplica\_accion}}(\textit{estado}, \textit{accion}) \\*
     \multicolumn{2}{l}{\textbf{Entrada}: \textit{estado} y \textit{accion}} \\*
@@ -286,13 +298,8 @@ Aquí se describen las funciones auxiliares que han sido utilizadas en la implem
     \> $x, y \leftarrow x - 1, y + 1$ \\
     Devolver $(x, y)$ como nuevo \textit{estado}
   \end{pseudo}
-  \caption{Pseudocódigo de \texttt{aplica\_accion}.}
-  \label{fig:aplica_accion}
-\end{figure}
 
 4. Método para obtener los estados libres de obstáculos
-
-\begin{figure}[h]
   \begin{pseudo}*
     \hd{\fn{estados\_sin\_obstaculos}}() \\*
     \multicolumn{2}{l}{\textbf{Salida}: Lista de estados sin obstáculos} \\*
@@ -303,15 +310,8 @@ Aquí se describen las funciones auxiliares que han sido utilizadas en la implem
     \> \> Agregar el estado a la lista \textit{estados\_sin\_obstaculos} \\
     Devolver la lista \textit{estados\_sin\_obstaculos}
   \end{pseudo}
-  \caption{Pseudocódigo detallado de \texttt{estados\_sin\_obstaculos}.}
-  \label{fig:estados_sin_obstaculos}
-\end{figure}
-
-Siendo \textit{nav\_estados} la variable global con todos los estados del entorno.\newline
 
 5. Método para obtener los posibles desvíos del agente al realizar una acción
-
-\begin{figure}[h]
   \begin{pseudo}*
     \hd{\fn{obtiene\_posibles\_errores}}(\textit{accion}) \\*
     \multicolumn{2}{l}{\textbf{Entrada}: \textit{accion}} \\*
@@ -337,56 +337,40 @@ Siendo \textit{nav\_estados} la variable global con todos los estados del entorn
     \> \textit{errores} $\leftarrow$ [] \\
     Devolver \textit{errores}
   \end{pseudo}
-  \caption{Pseudocódigo de \texttt{obtiene\_posibles\_errores}.}
-  \label{fig:obtiene_posibles_errores}
-\end{figure}
 
-
-6. Método para escoger una acción a partir de la política \(\epsilon-greedy\)\
-  
-\begin{figure}[h]
+6. Método para escoger una acción a partir de la política \(\epsilon-greedy\)\ 
   \begin{pseudo}*
     \hd{\fn{escoger\_accion}}(\textit{estado}, \textit{epsilon}) \\*
-    \multicolumn{2}{l}{\textbf{Entrada}: Estado \textit{estado} y valor de epsilon \textit{epsilon}} \\*
-    \multicolumn{2}{l}{\textbf{Salida}: Acción seleccionada} \\*
     \multicolumn{2}{l}{\textbf{Algoritmo}:}\\
     \textbf{Si} \textit{estado} no está en la tabla Q \textbf{entonces} \\
     \> Inicializar los valores de \textit{estado} a cero en la tabla Q \\
-    \\
     \textbf{Si} un número aleatorio entre 0 y 1 es menor que \textit{epsilon}\\
     \> \textbf{Seleccionar} una acción aleatoria \\
     \textbf{Si no} \\
     \> \textbf{Seleccionar} la mejor acción conocida \\
-    \\
     Devolver la acción seleccionada
   \end{pseudo}
-  \caption{Pseudocódigo de \texttt{escoger\_accion}.}
-  \label{fig:escoger_accion}
-\end{figure}
 
-7. Método para obtener la política a partir de los valores de la tabla Q\newline\newline\newline\newline\newline\newline\newline\newline
-
-\begin{figure}[h]
+7. Método para obtener la política a partir de los valores de la tabla Q
   \begin{pseudo}*
     \hd{\fn{obtener\_politica}}(\textit{Q}) \\*
     \multicolumn{2}{l}{\textbf{Entrada}: Tabla \textit{Q}} \\*
     \multicolumn{2}{l}{\textbf{Salida}: Política basada en \textit{Q}} \\*
+
     \multicolumn{2}{l}{\textbf{Algoritmo}:} \\
+    \\
     Inicializar \textit{politica} como diccionario vacío \\
     \textbf{Para cada} estado \textit{en} nav\_estados \textbf{hacer} \\
     \> \textbf{Si} estado \textit{está en} Q\_table \textbf{entonces} \\
     \> \> \textit{politica[estado]} $\leftarrow$ índice de max(\textit{Q\_table[estado]}) \\
     \> \textbf{Sino} \\
     \> \> \textit{politica[estado]} $\leftarrow$ 0 \\
+    \\
     \textbf{Retornar} \textit{politica}
+    
   \end{pseudo}
-  \caption{Pseudocódigo de la función \texttt{obtener\_politica}.}
-  \label{fig:obtener_politica}
-\end{figure}
-
+  
 8. Método para obtener la recompensa de aplicar una acción a un estado
-
-\begin{figure}[h]
   \begin{pseudo}*
     \hd{\fn{obtiene\_recompensa}}(\textit{estado}, \textit{accion}) \\*
     \multicolumn{2}{l}{\textbf{Entrada}: Estado actual \textit{estado}, acción a tomar \textit{accion}} \\*
@@ -404,23 +388,18 @@ Siendo \textit{nav\_estados} la variable global con todos los estados del entorn
     \> \textbf{Si} hay colisión en \textit{estado\_vecino} \textbf{entonces} \\
     \> \> devolver -\textit{penalizacion\_casilla\_adyacente\_obstaculo} \\
   \end{pseudo}
-  \caption{Pseudocódigo de la función \texttt{obtiene\_recompensa}.}
-  \label{fig:obtiene_recompensa}
+
   \vspace{0.5cm} 
   En este caso, \textit{recompensa\_objetivo\_alcanzado}, \textit{penalizacion\_colision}, \textit{penalizacion\_esperar} y \textit{penalizacion\_casilla\_adyacente\_obstaculo}
 son variables globales que se usan en el método para definir el valor de la recompensa en diferentes situaciones.\newline
 
 Tras presentar todas las funciones auxiliares utilizadas en la implementación de los algoritmos, procedemos a detallar la implementación de Q-Learning, Montecarlo y SARSA.\newline 
 
-\end{figure}
-
-
-\textbf{Q-Learning\newline}
+\textbf{Q-Learning \newline}
 
 En primer lugar, nos encontramos con el algoritmo de Q-Learning. Los valores de los hiperparámetros se han seleccionado de manera que optimicen el rendimiento del algoritmo. 
-No obstante, en la siguiente sección se detallarán los experimentos y pruebas realizadas.\newline\newline\newline
+No obstante, en la siguiente sección se detallarán los experimentos y pruebas realizadas.
 
-\begin{figure}[h]
   \begin{pseudo}[compact]
     \textbf{Q-Learning}: \\
     Inicializar $Q$ como diccionario vacío \\
@@ -443,18 +422,44 @@ No obstante, en la siguiente sección se detallarán los experimentos y pruebas 
     \> - \textit{Q\_table}[\textit{estado}][\textit{accion}])\\
     \> Si estado destino o terminal, terminar \\
   \end{pseudo}
-  \caption{Pseudocódigo del algoritmo Q-Learning.}
-  \label{fig:q-learning}
-\end{figure}
 
+\textbf{Montecarlo \newline}
 
+Pasamos ahora con el algoritmo de montecarlo. Los valores de los hiperparámetros se han seleccionado de manera que optimicen el rendimiento del algoritmo. 
+No obstante, en la siguiente sección se detallarán los experimentos y pruebas realizadas.\newline
 
-\textbf{SARSA\newline}
+  \begin{pseudo}[compact]
+    \textbf{Montecarlo}: \\
+    Inicializar \textit{racum} como diccionario de listas vacío \\
+    Inicializar \textit{policy} como un diccionario\\ 
+    Inicializar \textit{Q\_table} como diccionario vacío \\
+    Param: $\gamma = 0.4$, $epocas = 5000$, $max\_pasos = 100$ \\
+    Para cada época: \\
+    \> \textit{estado} $\leftarrow$ estado aleatorio sin obstáculos \\
+    \> \textit{accion\_index} $\leftarrow$ escoger\_accion(\textit{estado}) \\
+    \> \textit{accion} $\leftarrow$ nav\_acciones[\textit{accion\_index}] \\
+    \> \textit{episodio} $\leftarrow$ genera\_secuencia\\
+    \> Para cada paso $t$ en \textit{episodio}: \\
+    \> \> \textit{st}, \textit{at}, \textit{rt} $\leftarrow$ \textit{episodio}[t] \\
+    \> \> \textit{nuevo\_estado} $\leftarrow$ aplica\_accion(\textit{st}, \textit{at}) \\
+    \> \> Si \textit{st} no está en \textit{Q\_table} entonces \\+
+      Inicializar \textit{Q\_table}[\textit{st}] con ceros \\-
+    \> \> \textbf{Fin Si} \\
+    \> \> Si \textit{first\_visit}(t, \textit{episodio}) entonces \\+
+      $U \leftarrow \sum_{i=t}^{len(episodio)} \gamma^{(i-t)} \times r_i$ \\
+      \textit{index} $\leftarrow$ índice de \textit{at} en \textit{nav\_acciones} \\
+      \textit{racum}[(\textit{st}, \textit{at})].append($U$) \\
+      \textit{Q\_table}[\textit{st}][\textit{index}] $\leftarrow$ promedio(\textit{racum}[(\textit{st}, \textit{at})]) \\
+      \textit{policy}[\textit{st}] $\leftarrow$ \textit{nav\_acciones}[argmax(\textit{Q\_table}[\textit{st}])] \\-
+    \> \> \textbf{Fin Si} \\
+    \\
+  \end{pseudo}
+  
+  \textbf{SARSA\newline}
 
 A continuación se muestran los detalles de la implementación realizada del algoritmo SARSA. De igual manera que en Q-Learning, el valor de los hiperparámetros
-se han seleccionado de manera que optimicen el rendimiento del algoritmo. 
+se han seleccionado de manera que optimicen el rendimiento del algoritmo.
 
-\begin{figure}[!h]
   \begin{minipage}{\linewidth}
     \begin{pseudo}[compact]
       \textbf{SARSA}: \\
@@ -473,12 +478,7 @@ se han seleccionado de manera que optimicen el rendimiento del algoritmo.
       Inicializar \textit{Q\_table}[\textit{estado}] con ceros \\-
     \end{pseudo}
   \end{minipage}
-  \caption{Pseudocódigo del algoritmo SARSA (Parte 1).}
-  \label{fig:sarsa1}
-\end{figure}
 
-
-\begin{figure}
   \begin{minipage}{\linewidth}
   \begin{pseudo}
   \textbf{Fin Si} \\
@@ -493,12 +493,8 @@ se han seleccionado de manera que optimicen el rendimiento del algoritmo.
   \> \textit{accion} $\leftarrow$ \textit{nueva\_accion} \\
   \> Si \textit{estado} == destino, terminar \\
   \end{pseudo}
-  \end{minipage}
-  \caption{Pseudocódigo del algoritmo SARSA (Parte 2).}
-  \label{fig:sarsa2}
-  \vspace{0.5cm} 
+  \end{minipage}\newline
   En esta ocasión, al actualizar los valores de la tabla Q, el robot tiene en cuenta la política que está siguiendo. Esto es debido a su enfoque \textit{on-policy}, diferenciándolo de esta manera del algoritmo de Q-Learning.\newline
-\end{figure}
 
 
 
@@ -609,16 +605,92 @@ A continuación, se presentan los resultados obtenidos en cada uno de los mapas 
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.33]{resultado_sarsa_mapa_3}
+  \includegraphics[scale=0.23]{resultado_sarsa_mapa_3}
   \caption{Resultados SARSA mapa 3}
   \label{fig:resultado_sarsa_mapa_3}
 \end{figure}
 
-Tras implementar y ejecutar el algoritmo SARSA con los hiperparámetros descritos anteriormente, los resultados obtenidos fueron comparativamente inferiores a los logrados con Q-Learning y Montecarlo. 
-En primer lugar, las rutas generadas por SARSA fueron, en promedio, más largas y menos directas. Además, se observó que el agente colisionó con obstáculos con mayor frecuencia, lo que indica que el robot no aprendió completamente a esquivar los obstáculos. Por último, SARSA mostró una convergencia más lenta hacia una política óptima. 
-A pesar del aumento en el número de episodios de entrenamiento, la política aprendida no alcanzó el mismo nivel de eficacia que las aprendidas con los otros algoritmos.\newline
+\subsubsection{\textbf{Montecarlo}}
 
-Una observación interesante es que, a diferencia de Q-Learning, los hiperparámetros en este algoritmo tienen una mayor relevancia en su ejecución, evidenciándose caídas en el rendimiento cuando se probaban con valores alejados a los explicados con anterioridad.
+Los hiperparámetros utilizados para la ejecución del algoritmo de montecarlo fueron los siguientes:
+Factor de descuento($\gamma$) = 0.3, Épocas de entrenamiento = 5000, Máximo de pasos por episodio = 100\newline
+
+A diferencia de Q-Learning, se optó por un factor de descuento  bajo.\newline
+
+A continuación, se presentan los resultados obtenidos en cada uno de los mapas de prueba:\newline
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.2]{report/Montecarlo.png}
+  \caption{Resultados Montecarlo mapa 1}
+  \label{fig:Montecarlo}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.2]{report/Montecarlo2.png}
+  \caption{Resultados Montecarlo mapa 2}
+  \label{fig:Montecarlo2}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.2]{report/Montecarlo3.png}
+  \caption{Resultados Montecarlo mapa 3}
+  \label{fig:Montecarlo3}
+\end{figure}
+
+Tras implementar y ejecutar el algoritmo Montecarlo con los hiperparámetros descritos anteriormente, los resultados obtenidos fueron bastante satisfactorios, comparativamente mejores que los obetenidos en SARSA. 
+
+Al igual que en Q-Learning,el valor del hiperparámetro correspondiente al número de épocas de entrenamiento es sensible a modificaciones. Al reducirse considerablemente las épocas de entrenamiento se obtuvieron resultados notablemente peores.\newline
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.18]{report/Montecarlo_epcoas.png}
+  \caption{Resultados Montecarlo mapa 1 tras modificar el número de épocas}
+  \label{fig:Montecarlo_epocas}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.18]{report/Montecarlo2_epocas.png}
+  \caption{Resultados Montecarlo mapa 2 tras modificar el número de épocas}
+  \label{fig:Montecarlo2_epocas}
+\end{figure}
+
+\begin{figure}[h]
+  \includegraphics[scale=0.18]{report/Montecarlo3_epocas.png}
+  \caption{Resultados Montecarlo mapa 3 tras modificar el número de épocas}
+  \label{fig:Montecarlo3_epocas}
+  \vspace{0.5cm}
+  Como se puede apreciar, los resultados no son tan satisfactorios, ya que el robot no suele seleccionar la ruta más eficiente para llegar a la casilla objetivo. 
+  Este empeoramiento de los resultados es más notorio en los mapas 1 y 3, lo cual tiene sentido porque, al ser mapas más grandes, requieren un mayor número de épocas de entrenamiento para que el agente aprenda la política óptima. En el mapa 2, no se notaron cambios significativos.\newline
+\end{figure}
+
+Tras realizar pruebas durante un extenso periodo de tiempo, destacamos una observación interesante es que, a diferencia de Q-Learning, se obtienen mejores resultados en los mapas dados con un factor de descuento pequeño. Esto puede ser debido a que en Montecarlo se aprende de episodios completos mientras que en Q-Learning se aprende en cada paso del episodio. A continuación se muestran algunas pruebas Factor de descuento($\gamma$) = 0.9\newline\newline\newline\newline
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.18]{report/Montecarlo0.9.png}
+  \caption{Resultados Montecarlo mapa 1 tras modificar el factor de descuento}
+  \label{fig:Montecarlo0.9}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.18]{report/Montecarlo0.9_2.png}
+  \caption{Resultados Montecarlo mapa 2 tras modificar el factor de descuento}
+  \label{fig:Montecarlo0.9_2}
+\end{figure}
+
+\begin{figure}[h]
+  \includegraphics[scale=0.18]{report/Montecarlo0.9_3.png}
+  \caption{Resultados Montecarlo mapa 3 tras modificar el factor de descuento}
+  \label{fig:Montecarlo0.9_3}
+  \vspace{0.5cm}
+  Como se puede apreciar, los resultados siguen siendo satisfactorios, pero peores que con un factor de descuento bajo ya que a pesar que el robot suele seleccionar la ruta más eficiente, en ciertos estados selecciona una acción que difiere de la más óptima para llegar a la casilla objetivo.\newline
+\end{figure}
+
+Una observación interesante es que, a diferencia de Q-Learning, se obtienen mejores resultados en los mapas dados con un factor de descuento pequeño. Esto puede ser debido a que en Montecarlo se aprende de episodios completos mientras que en Q-Learning se aprende en cada paso del episodio. A continuación se muestran algunas pruebas Factor de descuento($\gamma$) = 0.9\newline
 
 \section{Conclusiones}
 
@@ -639,7 +711,6 @@ Como ideas de mejora y trabajo futuro, se podría investigar la combinación de 
 de mayor dimensionalidad. Además, se podría explorar la integración de mecanismos de aprendizaje transferencial para permitir al robot aplicar conocimientos previos a nuevos entornos, mejorando
 así su capacidad de generalización y adaptabilidad.
 
-\begin{figure}[h!]
   \begin{thebibliography}{99}
   \bibitem{b1} Richard S. Sutton y Andrew G. Barto. Reinforcement Learning: An Introduction.
   MIT Press, 2018.
@@ -652,9 +723,8 @@ así su capacidad de generalización y adaptabilidad.
   \bibitem{b7} https://aws.amazon.com/es/what-is/reinforcement-learning/
 
   \end{thebibliography}
-  \caption{Referencias bibliográficas.}
-  \label{fig:bibliography}
-  \end{figure}
+
+
   
 
 
