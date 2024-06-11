@@ -111,7 +111,7 @@ Los componentes principales de un sistema de aprendizaje por refuerzo son:
 \begin{itemize}
   \item \textbf{Agente}: Es la parte del sistema que toma decisiones e interactúa con el entorno. En nuestro caso, el agente es el robot móvil que busca planificar rutas en un entorno con obstáculos.
   \item \textbf{Entorno}: Es el espacio en el que el agente se mueve e interactúa. En nuestro caso, el entorno es un mapa con obstáculos.
-  \item \textbf{Acción}: Una acción es la decisión tomada por el agente en un estado particular. En nuestro caso, tenemos tenemos ocho acciones que representan cada uno de los posibles movimientos que puede efectuar el robot y una 
+  \item \textbf{Acción}: Una acción es la decisión tomada por el agente en un estado particular. En nuestro caso, tenemos ocho acciones que representan cada uno de los posibles movimientos que puede efectuar el robot y una 
     acción que representa que el agente permanezca en el mismo estado tras realizarla.
   \item \textbf{Recompensa}: La recompensa es la retroalimentación que el agente recibe del entorno después de tomar una acción en un estado dado. En nuestro caso, la recompensa puede ser positiva o negativa (también llamada penalización).
   \item \textbf{Política}: La política es la estrategia utilizada por el agente para seleccionar acciones en función de los estados del entorno. 
@@ -122,7 +122,7 @@ Los componentes principales de un sistema de aprendizaje por refuerzo son:
 
 \subsection{Descripción de los algoritmos}
 
-A continuación, describimos los algoritmos de aprendizaje por refuerzo que utilizados en nuestro trabajo:\newline
+A continuación, describimos los algoritmos de aprendizaje por refuerzo utilizados en nuestro trabajo:\newline
 
 \subsubsection{\textbf{Q-Learning}}
 El algoritmo Q-Learning es un método de aprendizaje por refuerzo basado en valores que se utiliza para encontrar la política óptima de selección de acciones en un entorno determinado.
@@ -169,7 +169,7 @@ U \leftarrow \sum_{i=t}^{T} \gamma^{i-t} R_i
 Donde:
 \begin{itemize}
     \item \(\gamma\) es el factor descuento que determina la importancia de las recompensas futuras en comparación con las recompensas inmediatas.
-    \item \(R_i\) es el retorno (recompensa acumulada) del \(i\)-ésimo episodio en el que se ha visitado el par \((s, a)\).
+    \item \(R_i\) es el retorno (recompensa acumulada) del \(i\)-ésimo episodio en el que se ha visitado el par \((s, a)\).\newline
 \end{itemize}
 
 \textbf{Hiperparámetros en el Algoritmo de Montecarlo}
@@ -258,7 +258,7 @@ Aquí se describen las funciones auxiliares que han sido utilizadas en la implem
     Leer las líneas del archivo \textit{fichero}\\
     y convertirlas a matriz\\
     Devolver la matriz y sus dimensiones
-  \end{pseudo}/
+  \end{pseudo}
 
 
 2. Método para comprobar si una casilla contiene un obstáculo
@@ -393,6 +393,27 @@ Aquí se describen las funciones auxiliares que han sido utilizadas en la implem
   En este caso, \textit{recompensa\_objetivo\_alcanzado}, \textit{penalizacion\_colision}, \textit{penalizacion\_esperar} y \textit{penalizacion\_casilla\_adyacente\_obstaculo}
 son variables globales que se usan en el método para definir el valor de la recompensa en diferentes situaciones.\newline
 
+\begin{pseudo}*
+    \hd{\fn{genera\_secuencia}}(\textit{mapa}, \textit{destino}, \textit{estado}, \textit{accion}, \textit{politica}, \textit{pasos}) \\*
+    \multicolumn{2}{l}{\textbf{Entrada}: \textit{mapa}, \textit{destino}, \textit{estado}, \textit{accion}, \textit{politica}, \textit{pasos}} \\*
+    \multicolumn{2}{l}{\textbf{Salida}: Secuencia de estados, acciones y recompensas} \\*
+    \multicolumn{2}{l}{\textbf{Algoritmo}:} \\
+    \textit{st, at} $\leftarrow$ \textit{estado}, \textit{accion} \\
+    \textit{rt} $\leftarrow$ \textit{obtiene\_recompensa(mapa, destino, st, at)} \\
+    \textit{secuencia} $\leftarrow$ \textit{[(st, at, rt)]} \\
+    \textit{paso} $\leftarrow$ \textit{0} \\
+    \textbf{Mientras} no sea \textit{es\_terminal(st, destino)} \textbf{y} \textit{paso} $<$ \textit{pasos} \textbf{hacer} \\
+    \> \textit{next\_state} $\leftarrow$ \textit{aplica\_accion(st, at, mapa)} \\
+    \> \textit{st} $\leftarrow$ \textit{next\_state} \\
+    \> \textit{at} $\leftarrow$ \textit{politica[st]} \\
+    \> \textit{rt} $\leftarrow$ \textit{obtiene\_recompensa(mapa, destino, st, at)} \\
+    \> \textit{secuencia.append((st, at, rt))} \\
+    \> \textit{paso} $\leftarrow$ \textit{paso} $+$ \textit{1} \\
+    \textbf{Fin Mientras} \\
+    \textbf{Devolver} \textit{secuencia}
+\end{pseudo}
+
+  
 Tras presentar todas las funciones auxiliares utilizadas en la implementación de los algoritmos, procedemos a detallar la implementación de Q-Learning, Montecarlo y SARSA.\newline 
 
 \textbf{Q-Learning \newline}
@@ -423,9 +444,9 @@ No obstante, en la siguiente sección se detallarán los experimentos y pruebas 
     \> Si estado destino o terminal, terminar \\
   \end{pseudo}
 
-\textbf{Montecarlo \newline}
+\textbf{\newline Montecarlo}
 
-Pasamos ahora con el algoritmo de montecarlo. Los valores de los hiperparámetros se han seleccionado de manera que optimicen el rendimiento del algoritmo. 
+Pasamos ahora con el algoritmo de Montecarlo. Los valores de los hiperparámetros se han seleccionado de manera que optimicen el rendimiento del algoritmo. 
 No obstante, en la siguiente sección se detallarán los experimentos y pruebas realizadas.\newline
 
   \begin{pseudo}[compact]
@@ -455,7 +476,7 @@ No obstante, en la siguiente sección se detallarán los experimentos y pruebas 
     \\
   \end{pseudo}
   
-  \textbf{SARSA\newline}
+  \textbf{\newline SARSA}
 
 A continuación se muestran los detalles de la implementación realizada del algoritmo SARSA. De igual manera que en Q-Learning, el valor de los hiperparámetros
 se han seleccionado de manera que optimicen el rendimiento del algoritmo.
@@ -476,11 +497,6 @@ se han seleccionado de manera que optimicen el rendimiento del algoritmo.
       \> \> \textit{nueva\_accion} $\leftarrow$ nav\_acciones[\textit{nueva\_accion\_index}] \\
       Si \textit{estado} no está en \textit{Q\_table} entonces \\+
       Inicializar \textit{Q\_table}[\textit{estado}] con ceros \\-
-    \end{pseudo}
-  \end{minipage}
-
-  \begin{minipage}{\linewidth}
-  \begin{pseudo}
   \textbf{Fin Si} \\
   Si \textit{nuevo\_estado} \textnormal{no está en} \textit{Q\_table} entonces \\+
     Inicializar \textit{Q\_table}[\textit{nuevo\_estado}] con ceros \\-
@@ -509,7 +525,7 @@ una casilla objetivo única. La posición inicial del robot se selecciona de man
 El objetivo es evaluar la capacidad del agente para planificar una ruta segura hacia el objetivo, evitando colisionar con los obstáculos presentes en el entorno. 
 Se espera que el agente se mueva por zonas alejadas de los pasillos para maximizar la seguridad durante la navegación.\newline
 
-A continuación, se presentan los resultados obtenidos de los experimentos realizados con cada uno de los algoritmos de aprendizaje por refuerzo. Se probaron diferentes configuraciones en los hiperparámetros de cada algoritmo para evaluar su rendimiento en una variedad de escenarios.\newline
+A continuación, se presentan los resultados obtenidos de los experimentos realizados con cada uno de los algoritmos de aprendizaje por refuerzo. Se probaron diferentes configuraciones en los hiperparámetros de cada algoritmo para evaluar su rendimiento en una variedad de escenarios.
 
 \subsubsection{\textbf{Q-Learning}}
 
@@ -538,7 +554,7 @@ A continuación, se presentan los resultados obtenidos en cada uno de los mapas 
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.33]{resultado_qlearning_mapa_3}
+  \includegraphics[scale=0.25]{resultado_qlearning_mapa_3}
   \caption{Resultados Q-Learning mapa 3}
   \label{fig:resultado_qlearning_mapa_3}
 \end{figure}
@@ -546,8 +562,7 @@ A continuación, se presentan los resultados obtenidos en cada uno de los mapas 
 Las imágenes de las rutas diseñadas por el robot en cada uno de los tres mapas muestran resultados muy satisfactorios por varias razones.
 En primer lugar, el robot ha sido capaz de generar rutas cortas y directas, minimizando el tiempo y los recursos necesarios para alcanzar el objetivo.
 Además, el robot ha demostrado una habilidad consistente para evitar colisiones con los obstáculos presentes en los mapas, incluso en aquellos con una mayor densidad de obstáculos. Finalmente, se destaca la robustez del algoritmo, 
-ya que los resultados han sido satisfactorios en todos los mapas, a pesar de las variaciones en el tamaño, la densidad de obstáculos y la posición del estado objetivo.\newline
-
+ya que los resultados han sido satisfactorios en todos los mapas, a pesar de las variaciones en el tamaño, la densidad de obstáculos y la posición del estado objetivo.
 Por otro lado, tras realizar numerosas pruebas con variaciones en el valor de los hiperparámetros, llegamos a la conclusión de que las modificaciones en los valores de la tasa de aprendizaje, el factor de descuento y la tasa de exploración no producían cambios significativos en los resultados,
 e incluso en algunos casos se observaron pequeñas mejoras. No obstante, se pudo verificar que al reducir significativamente el \textit{número de épocas de entrenamiento} 
 del algoritmo, los resultados fueron mucho peores. Por ejemplo, al establecer el número de épocas en 1000,
@@ -568,44 +583,45 @@ estos son los resultados obtenidos en cada uno de los mapas:
 \end{figure}
 
 \begin{figure}[h]
-  \includegraphics[scale=0.33]{resultado_2_qlearning_mapa_3}
+  \includegraphics[scale=0.25]{resultado_2_qlearning_mapa_3}
   \caption{Resultados Q-Learning mapa 3 tras modificar el número de épocas}
   \label{fig:resultado_2_qlearning_mapa_3}
   \vspace{0.5cm}
-  Como se puede apreciar, los resultados no son tan satisfactorios, ya que el robot colisiona con los obstáculos en ciertas ocasiones y no suele seleccionar la ruta más eficiente para llegar a la casilla objetivo. 
-  Este empeoramiento de los resultados es más notorio en los mapas 1 y 3, lo cual tiene sentido porque, al ser mapas más grandes, requieren un mayor número de épocas de entrenamiento para que el agente aprenda la política óptima.\newline
 \end{figure}
+  Como se puede apreciar, los resultados no son tan satisfactorios, ya que el robot colisiona con los obstáculos en ciertas ocasiones y no suele seleccionar la ruta más eficiente para llegar a la casilla objetivo. 
+  Este empeoramiento de los resultados es más notorio en los mapas 1 y 3, lo cual tiene sentido porque, al ser mapas más grandes, requieren un mayor número de épocas de entrenamiento para que el agente aprenda la política óptima.
 
 \subsubsection{\textbf{SARSA}}
 
 En la implementación del algoritmo SARSA, los valores de los hiperparámetros se ajustaron según el mapa. En el mapa 2 (el más simple de todos), aumentamos la tasa de aprendizaje a 0.5 para que el agente pudiera aprender rápidamente sin una excesiva preocupación por desbordamientos en los valores Q.
 Además, reducimos el factor de descuento a 0.5, ya que en un mapa más pequeño las recompensas futuras no son tan importantes como las inmediatas, dado que el objetivo está más cerca.
-Mantenemos el valor de epsilon muy bajo, en 0.1, pues la simpleza del mapa permite que este pueda ser explorado completamente de manera rápida.\newline
+Mantenemos el valor de epsilon muy bajo, en 0.1, pues la simpleza del mapa permite que este pueda ser explorado completamente de manera rápida.
 
-En los otros dos mapas, al ser entornos más complejos, disminuimos la tasa de aprendizaje y aumentamos tanto el factor de descuento como la tasa de exploración. Estas modificaciones permiten que el agente explore más y valore mejor las recompensas a largo plazo, necesarios en escenarios más complicados.\newline
+En los otros dos mapas, al ser entornos más complejos, disminuimos la tasa de aprendizaje y aumentamos tanto el factor de descuento como la tasa de exploración. Estas modificaciones permiten que el agente explore más y valore mejor las recompensas a largo plazo, necesarios en escenarios más complicados.
 
 Finalmente, es importante destacar que el número de episodios de entrenamiento es significativamente mayor que en Q-Learning. Esto se debe a que SARSA, al tener un enfoque \textit{on-policy}, normalmente converge más lentamente hacia una política óptima, especialmente cuando la estrategia de exploración no se 
-maneja adecuadamente~\cite{b4}. Por ello, consideramos necesario aumentar el número de iteraciones del algoritmo.\newline
+maneja adecuadamente~\cite{b4}. Por ello, consideramos necesario aumentar el número de iteraciones del algoritmo.
 
 A continuación, se presentan los resultados obtenidos en cada uno de los mapas de prueba:\newline
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.33]{resultado_sarsa_mapa_1}
+  \includegraphics[scale=0.29]{resultado_sarsa_mapa_1}
   \caption{Resultados SARSA mapa 1}
   \label{fig:resultado_sarsa_mapa_1}
 \end{figure}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.33]{resultado_sarsa_mapa_2}
+  \includegraphics[scale=0.25]{resultado_sarsa_mapa_2}
   \caption{Resultados SARSA mapa 2}
   \label{fig:resultado_sarsa_mapa_2}
+
 \end{figure}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.23]{resultado_sarsa_mapa_3}
+  \includegraphics[scale=0.24]{resultado_sarsa_mapa_3}
   \caption{Resultados SARSA mapa 3}
   \label{fig:resultado_sarsa_mapa_3}
 \end{figure}
@@ -689,8 +705,6 @@ Tras realizar pruebas durante un extenso periodo de tiempo, destacamos una obser
   \vspace{0.5cm}
   Como se puede apreciar, los resultados siguen siendo satisfactorios, pero peores que con un factor de descuento bajo ya que a pesar que el robot suele seleccionar la ruta más eficiente, en ciertos estados selecciona una acción que difiere de la más óptima para llegar a la casilla objetivo.\newline
 \end{figure}
-
-Una observación interesante es que, a diferencia de Q-Learning, se obtienen mejores resultados en los mapas dados con un factor de descuento pequeño. Esto puede ser debido a que en Montecarlo se aprende de episodios completos mientras que en Q-Learning se aprende en cada paso del episodio. A continuación se muestran algunas pruebas Factor de descuento($\gamma$) = 0.9\newline
 
 \section{Conclusiones}
 
